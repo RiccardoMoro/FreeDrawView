@@ -21,6 +21,9 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
     private static Paint sPaint;
 
     private ArrayList<Point> mPoints = new ArrayList<>();
+    private ArrayList<Path> mPaths = new ArrayList<>();
+
+    private boolean mFinishPath = false;
 
     public RMFreeDrawVIew(Context context) {
         this(context, null);
@@ -51,7 +54,12 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Path path = new Path();
+
+        for (int i = 0; i < mPaths.size(); i++) {
+            canvas.drawPath(mPaths.get(i), sPaint);
+        }
+
+        Path newPath = new Path();
 
         if (mPoints.size() > 1) {
             for (int i = mPoints.size() - 2; i < mPoints.size(); i++) {
@@ -82,15 +90,22 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             Point point = mPoints.get(i);
 
             if (first) {
-                path.moveTo(point.x, point.y);
+                newPath.moveTo(point.x, point.y);
                 first = false;
             } else {
                 Point prev = mPoints.get(i - 1);
-                path.cubicTo(prev.x + prev.dx, prev.y + prev.dy, point.x - point.dx, point.y - point.dy, point.x, point.y);
+                newPath.cubicTo(prev.x + prev.dx, prev.y + prev.dy, point.x - point.dx, point.y - point.dy, point.x, point.y);
             }
         }
 
-        canvas.drawPath(path, sPaint);
+        if (mFinishPath) {
+            mPaths.add(newPath);
+            mPoints.clear();
+
+            mFinishPath = false;
+        }
+
+        canvas.drawPath(newPath, sPaint);
     }
 
     @Override
@@ -108,12 +123,11 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             point.x = motionEvent.getX();
             point.y = motionEvent.getY();
             mPoints.add(point);
+        } else
+            mFinishPath = true;
 
-            invalidate();
-            return true;
-        }
-
-        return super.onTouchEvent(motionEvent);
+        invalidate();
+        return true;
     }
 
     private int convertDpToPixels(int dp) {
