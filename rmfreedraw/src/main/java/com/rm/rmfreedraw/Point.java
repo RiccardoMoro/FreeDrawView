@@ -9,6 +9,6 @@ public class Point {
 
     @Override
     public String toString() {
-        return "" + x + "," + y + " , " + dx + "," + dy;
+        return "" + x + "," + y;
     }
 }
