@@ -1,21 +1,21 @@
 package com.rm.rmfreedraw;
 
-import android.graphics.Paint;
-import android.graphics.Path;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  * Created by Riccardo Moro on 9/27/2016.
  */
 
-public class HistoryPath {
-    private Path path;
-    private Paint paint;
+public class HistoryPath implements Parcelable {
+    private SerializablePath path;
+    private SerializablePaint paint;
     private float originX, originY;
     private boolean isPoint;
 
-    public HistoryPath(@NonNull Path path, @NonNull Paint paint, float originX, float originY,
-                       boolean isPoint) {
+    public HistoryPath(@NonNull SerializablePath path, @NonNull SerializablePaint paint,
+                       float originX, float originY, boolean isPoint) {
         this.path = path;
         this.paint = paint;
         this.originX = originX;
@@ -23,19 +23,25 @@ public class HistoryPath {
         this.isPoint = isPoint;
     }
 
-    public Path getPath() {
+    protected HistoryPath(Parcel in) {
+        originX = in.readFloat();
+        originY = in.readFloat();
+        isPoint = in.readByte() != 0;
+    }
+
+    public SerializablePath getPath() {
         return path;
     }
 
-    public void setPath(Path path) {
+    public void setPath(SerializablePath path) {
         this.path = path;
     }
 
-    public Paint getPaint() {
+    public SerializablePaint getPaint() {
         return paint;
     }
 
-    public void setPaint(Paint paint) {
+    public void setPaint(SerializablePaint paint) {
         this.paint = paint;
     }
 
@@ -62,4 +68,33 @@ public class HistoryPath {
     public void setOriginY(float originY) {
         this.originY = originY;
     }
+
+
+    // Parcelable stuff
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(path);
+        dest.writeSerializable(paint);
+        dest.writeFloat(originX);
+        dest.writeFloat(originY);
+        dest.writeByte((byte) (isPoint ? 1 : 0));
+    }
+
+    // Parcelable CREATOR class
+    public static final Creator<HistoryPath> CREATOR = new Creator<HistoryPath>() {
+        @Override
+        public HistoryPath createFromParcel(Parcel in) {
+            return new HistoryPath(in);
+        }
+
+        @Override
+        public HistoryPath[] newArray(int size) {
+            return new HistoryPath[size];
+        }
+    };
 }

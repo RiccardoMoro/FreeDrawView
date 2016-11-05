@@ -1,5 +1,6 @@
 package com.rm.rmfreedraw;
 
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * Created by Riccardo Moro on 10/23/2016.
  */
 
-public class PointHelper {
+public class FreeDrawHelper {
 
     /**
      * Function used to check whenever a list of points is a line or a path to draw
@@ -26,5 +27,9 @@ public class PointHelper {
         }
 
         return true;
+    }
+
+    public static float convertDpToPixels(float dp) {
+        return (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 }

@@ -1,13 +1,13 @@
 package com.rm.rmfreedraw;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
@@ -24,12 +24,15 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
     private static final String TAG = RMFreeDrawVIew.class.getSimpleName();
 
-    private Paint mCurrentPaint;
-    private Path mCurrentPath;
+    private SerializablePaint mCurrentPaint;
+    private SerializablePath mCurrentPath;
 
     private ArrayList<Point> mPoints = new ArrayList<>();
     private ArrayList<HistoryPath> mPaths = new ArrayList<>();
     private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
+
+    private int mLastDimensionW = -1;
+    private int mLastDimensionH = -1;
 
     private boolean mFinishPath = false;
 
@@ -52,6 +55,40 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         initPaint();
     }
 
+    @Override
+    protected Parcelable onSaveInstanceState() {
+
+        // Get the superclass parcelable state
+        Parcelable superState = super.onSaveInstanceState();
+
+        if (mPoints.size() > 0) {// Currently doing a line, save it's current path
+            createPathFromPoints();
+        }
+
+        return new FreeDrawSavedState(superState, mPaths, mLastDimensionW, mLastDimensionH);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+
+        // If not instance of my state, let the superclass handle it
+        if (!(state instanceof FreeDrawSavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        FreeDrawSavedState savedState = (FreeDrawSavedState) state;
+        // Superclass restore state
+        super.onRestoreInstanceState(savedState.getSuperState());
+
+        // My state restore
+        mPaths = savedState.getPaths();
+        // Restore the last dimensions, so that in onSizeChanged i can calculate the
+        // height and width change factor and multiply every point x or y to it, so that if the
+        // View is resized, it adapt automatically it's points to the new width/height
+        mLastDimensionW = savedState.getLastDimensionW();
+        mLastDimensionH = savedState.getLastDimensionH();
+    }
 
     /**
      * Set the paint color
@@ -87,7 +124,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
      * @param dp The new weight in dp, must be > 0
      */
     public void setPaintWithDp(float dp) {
-        setPaintWidthPx(convertDpToPixels(dp));
+        setPaintWidthPx(FreeDrawHelper.convertDpToPixels(dp));
     }
 
     /**
@@ -145,7 +182,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
     // TODO Remove and take from custom xml attributes
     private void initPaint() {
-        mCurrentPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mCurrentPaint = new SerializablePaint(Paint.ANTI_ALIAS_FLAG);
         mCurrentPaint.setColor(Color.BLUE);
         mCurrentPaint.setStrokeJoin(Paint.Join.ROUND);
         mCurrentPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -153,7 +190,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 new CornerPathEffect(100f),
                 new CornerPathEffect(100f)));
         mCurrentPaint.setStyle(Paint.Style.STROKE);
-        mCurrentPaint.setStrokeWidth(convertDpToPixels(6));
+        mCurrentPaint.setStrokeWidth(FreeDrawHelper.convertDpToPixels(6));
     }
 
     @Override
@@ -173,7 +210,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
 
         if (mCurrentPath == null)
-            mCurrentPath = new Path();
+            mCurrentPath = new SerializablePath();
         else
             mCurrentPath.rewind();
 
@@ -193,7 +230,6 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                     mCurrentPath.moveTo(point.x, point.y);
                     first = false;
                 } else {
-                    //Point prev = mPoints.get(i - 1);
                     mCurrentPath.lineTo(mPoints.get(i).x, mPoints.get(i).y);
                 }
             }
@@ -201,14 +237,20 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
         // If the path is finished, add it to the history
         if (mFinishPath && mPoints.size() > 0) {
-            mPaths.add(new HistoryPath(new Path(mCurrentPath), new Paint(mCurrentPaint),
-                    mPoints.get(0).x, mPoints.get(0).y, PointHelper.isAPoint(mPoints)));
-            mPoints.clear();
-
-            mFinishPath = false;
+            createPathFromPoints();
         }
 
         canvas.drawPath(mCurrentPath, mCurrentPaint);
+    }
+
+    // Create a path from the current points
+    private void createPathFromPoints() {
+        mPaths.add(new HistoryPath(
+                new SerializablePath(mCurrentPath), new SerializablePaint(mCurrentPaint),
+                mPoints.get(0).x, mPoints.get(0).y, FreeDrawHelper.isAPoint(mPoints)));
+        mPoints.clear();
+
+        mFinishPath = false;
     }
 
     @Override
@@ -236,7 +278,63 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         return true;
     }
 
-    private float convertDpToPixels(float dp) {
-        return (dp * Resources.getSystem().getDisplayMetrics().density);
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        float xMultiplyFactor = 1;
+        float yMultiplyFactor = 1;
+
+
+        if (mLastDimensionW == -1) {
+            mLastDimensionW = w;
+        }
+
+        if (mLastDimensionH == -1) {
+            mLastDimensionH = h;
+        }
+
+        if (w >= 0 && w != oldw && w != mLastDimensionW) {
+            xMultiplyFactor = (float) w / mLastDimensionW;
+            mLastDimensionW = w;
+        }
+
+        if (h >= 0 && h != oldh && h != mLastDimensionH) {
+            yMultiplyFactor = (float) h / mLastDimensionH;
+            mLastDimensionH = h;
+        }
+
+        multiplyPathsAndPoints(xMultiplyFactor, yMultiplyFactor);
+    }
+
+    // Translate all the paths, used every time that this view size is changed
+    private void multiplyPathsAndPoints(float xMultiplyFactor, float yMultiplyFactor) {
+        if ((xMultiplyFactor == 1 && yMultiplyFactor == 1)
+                || (xMultiplyFactor <= 0 || yMultiplyFactor <= 0)) {
+            return;
+        }
+
+        for (HistoryPath historyPath : mPaths) {
+
+            // If it's a point, just multiply it's origins
+            if (historyPath.isPoint()) {
+                historyPath.setOriginX(historyPath.getOriginX() * xMultiplyFactor);
+                historyPath.setOriginY(historyPath.getOriginY() * yMultiplyFactor);
+            } else {
+
+                // Doing this because of android, which has a problem with
+                // multiple path transformations
+                SerializablePath scaledPath = new SerializablePath();
+                scaledPath.addPath(historyPath.getPath(),
+                        new TranslateMatrix(xMultiplyFactor, yMultiplyFactor));
+                historyPath.getPath().close();
+                historyPath.setPath(scaledPath);
+            }
+        }
+
+        for (Point point : mPoints) {
+            point.x *= xMultiplyFactor;
+            point.y *= yMultiplyFactor;
+        }
     }
 }

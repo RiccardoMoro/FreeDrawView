@@ -11,6 +11,7 @@ import com.rm.rmfreedraw.RMFreeDrawVIew;
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener {
 
     private RMFreeDrawVIew mFreeDrawView;
+    private View mSideView;
     private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
 
     @ColorInt
@@ -22,6 +23,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
+        mSideView = findViewById(R.id.side_view);
         mBtnRandomColor = (Button) findViewById(R.id.btn_color);
         mBtnUndo = (Button) findViewById(R.id.btn_undo);
         mBtnRedo = (Button) findViewById(R.id.btn_redo);
@@ -38,10 +40,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     private void changeColor() {
         mCurrentColor = ColorHelper.getRandomMaterialColor(this);
 
-        mBtnRandomColor.setBackgroundColor(mCurrentColor);
-        mBtnUndo.setBackgroundColor(mCurrentColor);
-        mBtnRedo.setBackgroundColor(mCurrentColor);
-        mBtnClearAll.setBackgroundColor(mCurrentColor);
+        mSideView.setBackgroundColor(mCurrentColor);
 
         mFreeDrawView.setPaintColor(mCurrentColor);
     }
