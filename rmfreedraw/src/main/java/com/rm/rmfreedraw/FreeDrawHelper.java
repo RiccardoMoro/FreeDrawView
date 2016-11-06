@@ -14,7 +14,7 @@ public class FreeDrawHelper {
     /**
      * Function used to check whenever a list of points is a line or a path to draw
      */
-    public static boolean isAPoint(@NonNull List<Point> points) {
+    static boolean isAPoint(@NonNull List<Point> points) {
         if (points.size() == 0)
             return false;
 
@@ -29,7 +29,17 @@ public class FreeDrawHelper {
         return true;
     }
 
+    /**
+     * Converts a given dp number to it's pixel corresponding number
+     */
     public static float convertDpToPixels(float dp) {
         return (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+    /**
+     * Converts a given pixel number to it's dp corresponding number
+     */
+    public static float convertPixelsToDp(float px) {
+        return px / Resources.getSystem().getDisplayMetrics().density;
     }
 }

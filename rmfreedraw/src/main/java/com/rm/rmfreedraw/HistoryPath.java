@@ -8,13 +8,13 @@ import android.support.annotation.NonNull;
  * Created by Riccardo Moro on 9/27/2016.
  */
 
-public class HistoryPath implements Parcelable {
+class HistoryPath implements Parcelable {
     private SerializablePath path;
     private SerializablePaint paint;
     private float originX, originY;
     private boolean isPoint;
 
-    public HistoryPath(@NonNull SerializablePath path, @NonNull SerializablePaint paint,
+    HistoryPath(@NonNull SerializablePath path, @NonNull SerializablePaint paint,
                        float originX, float originY, boolean isPoint) {
         this.path = path;
         this.paint = paint;
@@ -23,7 +23,7 @@ public class HistoryPath implements Parcelable {
         this.isPoint = isPoint;
     }
 
-    protected HistoryPath(Parcel in) {
+    private HistoryPath(Parcel in) {
         originX = in.readFloat();
         originY = in.readFloat();
         isPoint = in.readByte() != 0;

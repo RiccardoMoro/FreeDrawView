@@ -8,12 +8,12 @@ import java.io.Serializable;
  * Created by Riccardo Moro on 11/4/2016.
  */
 
-public class SerializablePaint extends Paint implements Serializable {
-    public SerializablePaint(int flags) {
+class SerializablePaint extends Paint implements Serializable {
+    SerializablePaint(int flags) {
         super(flags);
     }
 
-    public SerializablePaint(SerializablePaint paint) {
+    SerializablePaint(SerializablePaint paint) {
         super(paint);
     }
 }

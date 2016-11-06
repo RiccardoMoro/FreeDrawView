@@ -23,14 +23,50 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btn_color"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Change color"
-                android:textColor="@android:color/white" />
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stroke width"
+                        android:textColor="@android:color/white" />
+
+                    <SeekBar
+                        android:id="@+id/slider_thickness"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Stroke alpha"
+                        android:textColor="@android:color/white" />
+
+                    <SeekBar
+                        android:id="@+id/slider_alpha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,14 +93,30 @@
                     android:textColor="@android:color/white" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_clear_all"
-                style="@style/Base.Widget.AppCompat.Button.Borderless"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="clear all"
-                android:textColor="@android:color/white" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_clear_all"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="clear all"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btn_color"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Change color"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

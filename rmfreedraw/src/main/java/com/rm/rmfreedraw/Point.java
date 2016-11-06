@@ -10,11 +10,11 @@ import android.os.Parcelable;
 class Point implements Parcelable {
     float x, y;
 
-    public Point() {
+    Point() {
         x = y = -1;
     }
 
-    public Point(Parcel in) {
+    private Point(Parcel in) {
         x = in.readFloat();
         y = in.readFloat();
     }
