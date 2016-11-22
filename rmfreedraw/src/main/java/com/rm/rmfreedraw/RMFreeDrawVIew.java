@@ -51,6 +51,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
     // Needed to draw points
     private Paint mFillPaint;
 
+    private PathDrawnListener mPathDrawnListener;
+
     public RMFreeDrawVIew(Context context) {
         this(context, null);
     }
@@ -114,6 +116,10 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         // View is resized, it adapt automatically it's points to the new width/height
         mLastDimensionW = savedState.getLastDimensionW();
         mLastDimensionH = savedState.getLastDimensionH();
+
+        if (mPathDrawnListener != null) {
+            mPathDrawnListener.onNewPathDrawn();
+        }
     }
 
     /**
@@ -299,6 +305,17 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         return mCanceledPaths.size();
     }
 
+    /**
+     * Set a path drawn listener, will be called every time a new path is drawn
+     */
+    public void setOnPathDrawnListener(PathDrawnListener listener) {
+        mPathDrawnListener = listener;
+    }
+
+    public void removePathDrawnListener() {
+        mPathDrawnListener = null;
+    }
+
     private void initPaints() {
         mCurrentPaint = new SerializablePaint(Paint.ANTI_ALIAS_FLAG);
         mCurrentPaint.setColor(mPaintColor);
@@ -386,6 +403,10 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 new SerializablePath(mCurrentPath), new SerializablePaint(mCurrentPaint),
                 mPoints.get(0).x, mPoints.get(0).y, FreeDrawHelper.isAPoint(mPoints)));
         mPoints.clear();
+
+        if (mPathDrawnListener != null) {
+            mPathDrawnListener.onNewPathDrawn();
+        }
     }
 
     @Override

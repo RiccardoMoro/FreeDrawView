@@ -11,10 +11,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.rm.rmfreedraw.PathDrawnListener;
 import com.rm.rmfreedraw.RMFreeDrawVIew;
 
 public class ActivityMain extends AppCompatActivity implements View.OnClickListener, SeekBar
-        .OnSeekBarChangeListener {
+        .OnSeekBarChangeListener, PathDrawnListener {
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -43,6 +44,8 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
         mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
+        mFreeDrawView.setOnPathDrawnListener(this);
+
         mSideView = findViewById(R.id.side_view);
         mBtnRandomColor = (Button) findViewById(R.id.btn_color);
         mBtnUndo = (Button) findViewById(R.id.btn_undo);
@@ -64,8 +67,6 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mThicknessBar.setProgress((int) mFreeDrawView.getPaintWidth());
         mThicknessBar.setOnSeekBarChangeListener(this);
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
-
-        updateUndoRedo();
     }
 
     @Override
@@ -184,5 +185,10 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onNewPathDrawn() {
+        updateUndoRedo();
     }
 }
