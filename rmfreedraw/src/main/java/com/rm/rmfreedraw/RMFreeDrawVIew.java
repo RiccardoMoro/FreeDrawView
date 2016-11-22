@@ -47,6 +47,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
     private boolean mFinishPath = false;
 
+    private Paint mFillPaint;
+
     public RMFreeDrawVIew(Context context) {
         this(context, null);
     }
@@ -63,7 +65,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
         setBackgroundColor(Color.WHITE);
 
-        initPaint();
+        initPaints();
     }
 
     @Override
@@ -98,6 +100,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mPaths = savedState.getPaths();
         mCanceledPaths = savedState.getCanceledPaths();
         mCurrentPaint = savedState.getCurrentPaint();
+
+        initFillPaint();
 
         mResizeBehaviour = savedState.getResizeBehaviour();
 
@@ -279,7 +283,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         invalidate();
     }
 
-    private void initPaint() {
+    private void initPaints() {
         mCurrentPaint = new SerializablePaint(Paint.ANTI_ALIAS_FLAG);
         mCurrentPaint.setColor(mPaintColor);
         mCurrentPaint.setAlpha(mPaintAlpha);
@@ -290,6 +294,13 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 new CornerPathEffect(100f)));
         mCurrentPaint.setStyle(Paint.Style.STROKE);
         mCurrentPaint.setStrokeWidth(FreeDrawHelper.convertDpToPixels(DEFAULT_STROKE_WIDTH));
+
+        initFillPaint();
+    }
+
+    private void initFillPaint() {
+        mFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mFillPaint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -305,7 +316,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             // If the path is just a single point, draw as a point
             if (currentPath.isPoint()) {
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
-                        currentPath.getPaint().getStrokeWidth() / 2, currentPath.getPaint());
+                        currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
             } else {// Else draw the complete path
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
             }
@@ -319,8 +330,10 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
         // If a single point, add a circle to the path
         if (mPoints.size() == 1) {
-            mCurrentPath.addCircle(mPoints.get(0).x, mPoints.get(0).y,
-                    mCurrentPaint.getStrokeWidth() / 2, Path.Direction.CW);
+            canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
+                    mCurrentPaint.getStrokeWidth() / 2, mFillPaint);
+            /*mCurrentPath.addCircle(mPoints.get(0).x, mPoints.get(0).y,
+                    mCurrentPaint.getStrokeWidth() / 4, Path.Direction.CW);*/
         } else {// Else draw the complete series of points
 
             boolean first = true;
