@@ -285,6 +285,20 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         invalidate();
     }
 
+    /**
+     * Get how many undo operations are available
+     */
+    public int getUndoCount() {
+        return mPaths.size();
+    }
+
+    /**
+     * Get how many redo operations are available
+     */
+    public int getRedoCount() {
+        return mCanceledPaths.size();
+    }
+
     private void initPaints() {
         mCurrentPaint = new SerializablePaint(Paint.ANTI_ALIAS_FLAG);
         mCurrentPaint.setColor(mPaintColor);

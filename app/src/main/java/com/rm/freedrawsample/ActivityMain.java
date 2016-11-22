@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.rm.rmfreedraw.RMFreeDrawVIew;
 
@@ -27,6 +28,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     private View mSideView;
     private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
     private SeekBar mThicknessBar, mAlphaBar;
+    private TextView mTxtRedoCount, mTxtUndoCount;
 
     private ImageView mImgScreen;
 
@@ -36,6 +38,9 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mImgScreen = (ImageView) findViewById(R.id.img_screen);
+
+        mTxtRedoCount = (TextView) findViewById(R.id.txt_redo_count);
+        mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
         mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
         mSideView = findViewById(R.id.side_view);
@@ -59,6 +64,8 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mThicknessBar.setProgress((int) mFreeDrawView.getPaintWidth());
         mThicknessBar.setOnSeekBarChangeListener(this);
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
+
+        updateUndoRedo();
     }
 
     @Override
@@ -128,11 +135,20 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
 
         if (id == mBtnRedo.getId()) {
             mFreeDrawView.redoLast();
+
+
         }
 
         if (id == mBtnClearAll.getId()) {
             mFreeDrawView.clearAll();
         }
+
+        updateUndoRedo();
+    }
+
+    private void updateUndoRedo() {
+        mTxtUndoCount.setText(String.valueOf(mFreeDrawView.getUndoCount()));
+        mTxtRedoCount.setText(String.valueOf(mFreeDrawView.getRedoCount()));
     }
 
     // SliderListener

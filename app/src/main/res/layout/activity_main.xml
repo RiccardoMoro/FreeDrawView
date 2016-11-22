@@ -81,23 +81,53 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_undo"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="Undo"
-                    android:textColor="@android:color/white"/>
+                    android:layout_weight="1">
 
-                <Button
-                    android:id="@+id/btn_redo"
-                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    <Button
+                        android:id="@+id/btn_undo"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Undo"
+                        android:textColor="@android:color/white"/>
+
+                    <TextView
+                        android:id="@+id/txt_undo_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:padding="12dp"
+                        android:textColor="@color/white"/>
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="redo"
-                    android:textColor="@android:color/white"/>
+                    android:layout_weight="1">
+
+                    <Button
+                        android:id="@+id/btn_redo"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="redo"
+                        android:textColor="@android:color/white"/>
+
+                    <TextView
+                        android:id="@+id/txt_redo_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:padding="12dp"
+                        android:textColor="@color/white"/>
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
