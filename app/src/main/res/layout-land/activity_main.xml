@@ -112,7 +112,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="Change color"
+                    android:text="Random color"
                     android:textColor="@android:color/white" />
 
                 <Button
