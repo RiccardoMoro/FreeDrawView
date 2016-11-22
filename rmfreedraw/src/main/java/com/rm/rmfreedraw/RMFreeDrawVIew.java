@@ -48,6 +48,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
     private boolean mFinishPath = false;
 
+    // Needed to draw points
     private Paint mFillPaint;
 
     public RMFreeDrawVIew(Context context) {
@@ -304,6 +305,11 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mFillPaint.setStyle(Paint.Style.FILL);
     }
 
+    private void setupFillPaint(Paint from) {
+        mFillPaint.setColor(from.getColor());
+        mFillPaint.setAlpha(from.getAlpha());
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -316,7 +322,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
             // If the path is just a single point, draw as a point
             if (currentPath.isPoint()) {
-                mFillPaint.setColor(currentPath.getPaint().getColor());
+                setupFillPaint(currentPath.getPaint());
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
             } else {// Else draw the complete path
@@ -332,7 +338,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
         // If a single point, add a circle to the path
         if (mPoints.size() == 1) {
-            mFillPaint.setColor(mCurrentPaint.getColor());
+            setupFillPaint(mCurrentPaint);
             canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
                     mCurrentPaint.getStrokeWidth() / 2, mFillPaint);
         } else {// Else draw the complete series of points
