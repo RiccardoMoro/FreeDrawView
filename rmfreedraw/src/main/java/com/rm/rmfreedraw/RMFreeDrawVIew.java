@@ -1,12 +1,12 @@
 package com.rm.rmfreedraw;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Riccardo Moro on 9/10/2016.
@@ -31,7 +32,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
     private SerializablePaint mCurrentPaint;
     private SerializablePath mCurrentPath;
 
-    private ResizeBehaviour mResizeBehaviour = ResizeBehaviour.FIT_XY;
+    private ResizeBehaviour mResizeBehaviour = ResizeBehaviour.FIT_INSIDE;
 
     private ArrayList<Point> mPoints = new ArrayList<>();
     private ArrayList<HistoryPath> mPaths = new ArrayList<>();
@@ -277,7 +278,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
      * Remove all the paths and redraw (can be undone with {@link #redoLast()})
      */
     public void clearAll() {
-
+        Collections.reverse(mPaths);
         mCanceledPaths.addAll(mPaths);
         mPaths.clear();
         invalidate();
@@ -315,6 +316,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
             // If the path is just a single point, draw as a point
             if (currentPath.isPoint()) {
+                mFillPaint.setColor(currentPath.getPaint().getColor());
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
             } else {// Else draw the complete path
@@ -330,10 +332,9 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
 
         // If a single point, add a circle to the path
         if (mPoints.size() == 1) {
+            mFillPaint.setColor(mCurrentPaint.getColor());
             canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
                     mCurrentPaint.getStrokeWidth() / 2, mFillPaint);
-            /*mCurrentPath.addCircle(mPoints.get(0).x, mPoints.get(0).y,
-                    mCurrentPaint.getStrokeWidth() / 4, Path.Direction.CW);*/
         } else {// Else draw the complete series of points
 
             boolean first = true;
@@ -439,11 +440,20 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             mPoints.clear();
             return;
         } else if (mResizeBehaviour == ResizeBehaviour.FIT_INSIDE) {
-            // If fit inside, just use the lowest among the scale factors
-            if (xMultiplyFactor < yMultiplyFactor) {
-                yMultiplyFactor = xMultiplyFactor;
+
+            if (xMultiplyFactor > 1 || yMultiplyFactor <= 1) {
+                // If fit inside, just use the lowest among the scale factors
+                if (xMultiplyFactor < yMultiplyFactor) {
+                    yMultiplyFactor = xMultiplyFactor;
+                } else {
+                    xMultiplyFactor = yMultiplyFactor;
+                }
             } else {
-                xMultiplyFactor = yMultiplyFactor;
+                if (xMultiplyFactor > yMultiplyFactor) {
+                    yMultiplyFactor = xMultiplyFactor;
+                } else {
+                    xMultiplyFactor = yMultiplyFactor;
+                }
             }
         } else if (mResizeBehaviour == ResizeBehaviour.CROP) {
             xMultiplyFactor = yMultiplyFactor = 1;
@@ -485,5 +495,13 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             historyPath.getPath().close();
             historyPath.setPath(scaledPath);
         }
+    }
+
+    public Bitmap getDrawScreenshot() {
+        Bitmap screenShotBitmap = Bitmap.createBitmap(
+                getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(screenShotBitmap);
+        draw(c);
+        return screenShotBitmap;
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FreeDrawSample</string>
+    <string name="show_screenshot">Take Screenshot</string>
 </resources>

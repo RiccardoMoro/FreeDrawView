@@ -1,14 +1,19 @@
 package com.rm.freedrawsample;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.rm.rmfreedraw.RMFreeDrawVIew;
 
-public class ActivityMain extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class ActivityMain extends AppCompatActivity implements View.OnClickListener, SeekBar
+        .OnSeekBarChangeListener {
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -23,10 +28,14 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
     private SeekBar mThicknessBar, mAlphaBar;
 
+    private ImageView mImgScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mImgScreen = (ImageView) findViewById(R.id.img_screen);
 
         mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
         mSideView = findViewById(R.id.side_view);
@@ -50,6 +59,44 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mThicknessBar.setProgress((int) mFreeDrawView.getPaintWidth());
         mThicknessBar.setOnSeekBarChangeListener(this);
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menu_screen) {
+            takeAndShowScreenshot();
+            return true;
+        }
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void takeAndShowScreenshot() {
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bitmap bitmap = mFreeDrawView.getDrawScreenshot();
+
+        mSideView.setVisibility(View.GONE);
+        mFreeDrawView.setVisibility(View.GONE);
+
+        mImgScreen.setVisibility(View.VISIBLE);
+
+        mImgScreen.setImageBitmap(bitmap);
     }
 
     @Override
@@ -106,5 +153,20 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mImgScreen.getVisibility() == View.VISIBLE) {
+            mImgScreen.setImageBitmap(null);
+            mImgScreen.setVisibility(View.GONE);
+
+            mFreeDrawView.setVisibility(View.VISIBLE);
+            mSideView.setVisibility(View.VISIBLE);
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
