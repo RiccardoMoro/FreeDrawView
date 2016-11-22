@@ -6,6 +6,13 @@
     android:orientation="horizontal"
     tools:context="com.rm.freedrawsample.ActivityMain">
 
+    <ImageView
+        android:id="@+id/img_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:visibility="gone"/>
+
     <com.rm.rmfreedraw.RMFreeDrawVIew
         android:id="@+id/free_draw_view"
         android:layout_width="0dp"
