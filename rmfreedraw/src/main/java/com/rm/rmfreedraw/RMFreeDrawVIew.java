@@ -295,6 +295,10 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
 
+        // Avoid concurrency errors by first setting the finished path variable to false
+        final boolean finishedPath = mFinishPath;
+        mFinishPath = false;
+
         for (int i = 0; i < mPaths.size(); i++) {
             HistoryPath currentPath = mPaths.get(i);
 
@@ -335,7 +339,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         }
 
         // If the path is finished, add it to the history
-        if (mFinishPath && mPoints.size() > 0) {
+        if (finishedPath && mPoints.size() > 0) {
             createPathFromPoints();
         }
 
@@ -348,8 +352,6 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 new SerializablePath(mCurrentPath), new SerializablePaint(mCurrentPaint),
                 mPoints.get(0).x, mPoints.get(0).y, FreeDrawHelper.isAPoint(mPoints)));
         mPoints.clear();
-
-        mFinishPath = false;
     }
 
     @Override
@@ -358,7 +360,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         // Clear all the history when restarting to draw
         mCanceledPaths.clear();
 
-        if (motionEvent.getAction() != MotionEvent.ACTION_UP) {
+        if ((motionEvent.getAction() != MotionEvent.ACTION_UP) &&
+                (motionEvent.getAction() != MotionEvent.ACTION_CANCEL)) {
             Point point;
             for (int i = 0; i < motionEvent.getHistorySize(); i++) {
                 point = new Point();
