@@ -12,6 +12,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -381,7 +382,6 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mFillPaint.setAlpha(from.getAlpha());
     }
 
-    // FIXME: 29/11/16 The first point is not rendered until the next one has been drawn
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -397,19 +397,22 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 setupFillPaint(currentPath.getPaint());
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
+
+                Log.e(TAG, "History point");
             } else {// Else draw the complete path
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
+                Log.e(TAG, "History path");
             }
         }
 
-
+        // Initialize the current path
         if (mCurrentPath == null)
             mCurrentPath = new SerializablePath();
         else
             mCurrentPath.rewind();
 
         // If a single point, add a circle to the path
-        if (mPoints.size() == 1) {
+        if (mPoints.size() == 1 || FreeDrawHelper.isAPoint(mPoints)) {
             setupFillPaint(mCurrentPaint);
             canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
                     mCurrentPaint.getStrokeWidth() / 2, mFillPaint);

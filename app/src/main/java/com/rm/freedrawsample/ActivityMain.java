@@ -137,8 +137,6 @@ public class ActivityMain extends AppCompatActivity
 
         if (id == mBtnRedo.getId()) {
             mFreeDrawView.redoLast();
-
-
         }
 
         if (id == mBtnClearAll.getId()) {
