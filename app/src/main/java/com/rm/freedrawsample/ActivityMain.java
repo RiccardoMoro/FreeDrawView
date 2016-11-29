@@ -11,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.rm.rmfreedraw.PathDrawnListener;
+import com.rm.rmfreedraw.PathRedoUndoCountChangeListener;
 import com.rm.rmfreedraw.RMFreeDrawVIew;
 
-public class ActivityMain extends AppCompatActivity implements View.OnClickListener, SeekBar
-        .OnSeekBarChangeListener, PathDrawnListener {
+public class ActivityMain extends AppCompatActivity
+        implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,
+        PathRedoUndoCountChangeListener {
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -44,7 +45,7 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
         mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
-        mFreeDrawView.setOnPathDrawnListener(this);
+        mFreeDrawView.setPathRedoUndoCountChangeListener(this);
 
         mSideView = findViewById(R.id.side_view);
         mBtnRandomColor = (Button) findViewById(R.id.btn_color);
@@ -143,13 +144,6 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
         if (id == mBtnClearAll.getId()) {
             mFreeDrawView.clearAll();
         }
-
-        updateUndoRedo();
-    }
-
-    private void updateUndoRedo() {
-        mTxtUndoCount.setText(String.valueOf(mFreeDrawView.getUndoCount()));
-        mTxtRedoCount.setText(String.valueOf(mFreeDrawView.getRedoCount()));
     }
 
     // SliderListener
@@ -188,7 +182,12 @@ public class ActivityMain extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onNewPathDrawn() {
-        updateUndoRedo();
+    public void onUndoCountChanged(int undoCount) {
+        mTxtUndoCount.setText(String.valueOf(undoCount));
+    }
+
+    @Override
+    public void onRedoCountChanged(int redoCount) {
+        mTxtRedoCount.setText(String.valueOf(redoCount));
     }
 }

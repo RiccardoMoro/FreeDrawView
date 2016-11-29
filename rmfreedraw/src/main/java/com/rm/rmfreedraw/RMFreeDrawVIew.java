@@ -22,7 +22,6 @@ import java.util.Collections;
  * Created by Riccardo Moro on 9/10/2016.
  */
 public class RMFreeDrawVIew extends View implements View.OnTouchListener {
-    // TODO Riccardo: let the user choose between keep aspect ratio or fit
     private static final String TAG = RMFreeDrawVIew.class.getSimpleName();
 
     private static final float DEFAULT_STROKE_WIDTH = 4;
@@ -52,6 +51,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
     private Paint mFillPaint;
 
     private PathDrawnListener mPathDrawnListener;
+    private PathRedoUndoCountChangeListener mPathRedoUndoCountChangeListener;
 
     public RMFreeDrawVIew(Context context) {
         this(context, null);
@@ -117,9 +117,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mLastDimensionW = savedState.getLastDimensionW();
         mLastDimensionH = savedState.getLastDimensionH();
 
-        if (mPathDrawnListener != null) {
-            mPathDrawnListener.onNewPathDrawn();
-        }
+        notifyRedoUndoCountChanged();
     }
 
     /**
@@ -254,6 +252,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             mCanceledPaths.add(mPaths.get(mPaths.size() - 1));
             mPaths.remove(mPaths.size() - 1);
             invalidate();
+
+            notifyRedoUndoCountChanged();
         }
     }
 
@@ -266,6 +266,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             mPaths.addAll(mCanceledPaths);
             mCanceledPaths.clear();
             invalidate();
+
+            notifyRedoUndoCountChanged();
         }
     }
 
@@ -278,6 +280,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
             mPaths.add(mCanceledPaths.get(mCanceledPaths.size() - 1));
             mCanceledPaths.remove(mCanceledPaths.size() - 1);
             invalidate();
+
+            notifyRedoUndoCountChanged();
         }
     }
 
@@ -289,6 +293,8 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mCanceledPaths.addAll(mPaths);
         mPaths.clear();
         invalidate();
+
+        notifyRedoUndoCountChanged();
     }
 
     /**
@@ -312,8 +318,42 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mPathDrawnListener = listener;
     }
 
+    /**
+     * Remove the path drawn listener
+     */
     public void removePathDrawnListener() {
         mPathDrawnListener = null;
+    }
+
+    /**
+     * Set a redo-undo count change listener, this will be called every time undo or redo count
+     * changes
+     */
+    public void setPathRedoUndoCountChangeListener(PathRedoUndoCountChangeListener listener) {
+        mPathRedoUndoCountChangeListener = listener;
+    }
+
+    /**
+     * Remove the redo-undo count listener
+     */
+    public void removePathRedoUndoCountChangeListener() {
+        mPathRedoUndoCountChangeListener = null;
+    }
+
+
+    // Internal methods
+    private void notifyPathDrawn() {
+        if (mPathDrawnListener != null) {
+            mPathDrawnListener.onNewPathDrawn();
+        }
+    }
+
+
+    private void notifyRedoUndoCountChanged() {
+        if (mPathRedoUndoCountChangeListener != null) {
+            mPathRedoUndoCountChangeListener.onRedoCountChanged(getRedoCount());
+            mPathRedoUndoCountChangeListener.onUndoCountChanged(getUndoCount());
+        }
     }
 
     private void initPaints() {
@@ -341,6 +381,7 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
         mFillPaint.setAlpha(from.getAlpha());
     }
 
+    // FIXME: 29/11/16 The first point is not rendered until the next one has been drawn
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -404,9 +445,9 @@ public class RMFreeDrawVIew extends View implements View.OnTouchListener {
                 mPoints.get(0).x, mPoints.get(0).y, FreeDrawHelper.isAPoint(mPoints)));
         mPoints.clear();
 
-        if (mPathDrawnListener != null) {
-            mPathDrawnListener.onNewPathDrawn();
-        }
+        notifyPathDrawn();
+
+        notifyRedoUndoCountChanged();
     }
 
     @Override
