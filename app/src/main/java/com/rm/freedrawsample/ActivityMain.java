@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.rm.rmfreedraw.PathRedoUndoCountChangeListener;
-import com.rm.rmfreedraw.RMFreeDrawVIew;
+import com.rm.rmfreedraw.RMFreeDrawView;
 
 public class ActivityMain extends AppCompatActivity
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,
@@ -26,7 +26,7 @@ public class ActivityMain extends AppCompatActivity
     private static final int ALPHA_MAX = 255;
     private static final int ALPHA_MIN = 0;
 
-    private RMFreeDrawVIew mFreeDrawView;
+    private RMFreeDrawView mFreeDrawView;
     private View mSideView;
     private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
     private SeekBar mThicknessBar, mAlphaBar;
@@ -44,7 +44,7 @@ public class ActivityMain extends AppCompatActivity
         mTxtRedoCount = (TextView) findViewById(R.id.txt_redo_count);
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
-        mFreeDrawView = (RMFreeDrawVIew) findViewById(R.id.free_draw_view);
+        mFreeDrawView = (RMFreeDrawView) findViewById(R.id.free_draw_view);
         mFreeDrawView.setPathRedoUndoCountChangeListener(this);
 
         mSideView = findViewById(R.id.side_view);
@@ -148,7 +148,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (seekBar.getId() == mThicknessBar.getId()) {
-            mFreeDrawView.setPaintWithDp(THICKNESS_MIN + (progress * THICKNESS_STEP));
+            mFreeDrawView.setPaintWidthDp(THICKNESS_MIN + (progress * THICKNESS_STEP));
         } else {
             mFreeDrawView.setPaintAlpha(ALPHA_MIN + (progress * ALPHA_STEP));
         }

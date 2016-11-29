@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         android:visibility="gone"/>
 
-    <com.rm.rmfreedraw.RMFreeDrawVIew
+    <com.rm.rmfreedraw.RMFreeDrawView
         android:id="@+id/free_draw_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
