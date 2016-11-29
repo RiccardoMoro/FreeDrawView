@@ -10,13 +10,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rm.rmfreedraw.PathRedoUndoCountChangeListener;
 import com.rm.rmfreedraw.RMFreeDrawView;
 
 public class ActivityMain extends AppCompatActivity
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,
-        PathRedoUndoCountChangeListener {
+        PathRedoUndoCountChangeListener, RMFreeDrawView.DrawCreatorListener {
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -98,14 +99,7 @@ public class ActivityMain extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bitmap bitmap = mFreeDrawView.getDrawScreenshot();
-
-        mSideView.setVisibility(View.GONE);
-        mFreeDrawView.setVisibility(View.GONE);
-
-        mImgScreen.setVisibility(View.VISIBLE);
-
-        mImgScreen.setImageBitmap(bitmap);
+        mFreeDrawView.getDrawScreenshot(this);
     }
 
     @Override
@@ -187,5 +181,20 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onRedoCountChanged(int redoCount) {
         mTxtRedoCount.setText(String.valueOf(redoCount));
+    }
+
+    @Override
+    public void onDrawCreated(Bitmap draw) {
+        mSideView.setVisibility(View.GONE);
+        mFreeDrawView.setVisibility(View.GONE);
+
+        mImgScreen.setVisibility(View.VISIBLE);
+
+        mImgScreen.setImageBitmap(draw);
+    }
+
+    @Override
+    public void onDrawCreationError() {
+        Toast.makeText(this, "Error, cannot create bitmap", Toast.LENGTH_SHORT).show();
     }
 }

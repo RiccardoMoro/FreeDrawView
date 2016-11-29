@@ -8,10 +8,12 @@ import android.graphics.Color;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -354,6 +356,57 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
         mPathRedoUndoCountChangeListener = null;
     }
 
+    /**
+     * Create a Bitmap with the content drawn inside the view
+     */
+    public void getDrawScreenshot(@NonNull final DrawCreatorListener listener) {
+        new AsyncTask<Void, Void, Void>() {
+
+            private int width, height;
+            private Canvas canvas;
+            private Bitmap bitmap;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                width = getWidth();
+                height = getHeight();
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                try {
+                    bitmap = Bitmap.createBitmap(
+                            width, height, Bitmap.Config.ARGB_8888);
+                    canvas = new Canvas(bitmap);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    cancel(true);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+
+                if (listener != null) {
+                    listener.onDrawCreationError();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                draw(canvas);
+                listener.onDrawCreated(bitmap);
+            }
+        }.execute();
+    }
+
 
     // Internal methods
     private void notifyPathDrawn() {
@@ -615,11 +668,9 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
         }
     }
 
-    public Bitmap getDrawScreenshot() {
-        Bitmap screenShotBitmap = Bitmap.createBitmap(
-                getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(screenShotBitmap);
-        draw(c);
-        return screenShotBitmap;
+    public interface DrawCreatorListener {
+        void onDrawCreated(Bitmap draw);
+
+        void onDrawCreationError();
     }
 }
