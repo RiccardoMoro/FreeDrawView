@@ -34,6 +34,7 @@ public class ActivityMain extends AppCompatActivity
     private TextView mTxtRedoCount, mTxtUndoCount;
 
     private ImageView mImgScreen;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,8 @@ public class ActivityMain extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        mMenu = menu;
 
         return true;
     }
@@ -161,6 +164,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onBackPressed() {
         if (mImgScreen.getVisibility() == View.VISIBLE) {
+            mMenu.findItem(R.id.menu_screen).setVisible(true);
             mImgScreen.setImageBitmap(null);
             mImgScreen.setVisibility(View.GONE);
 
@@ -187,6 +191,8 @@ public class ActivityMain extends AppCompatActivity
     public void onDrawCreated(Bitmap draw) {
         mSideView.setVisibility(View.GONE);
         mFreeDrawView.setVisibility(View.GONE);
+
+        mMenu.findItem(R.id.menu_screen).setVisible(false);
 
         mImgScreen.setVisibility(View.VISIBLE);
 

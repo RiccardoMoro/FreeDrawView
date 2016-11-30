@@ -359,51 +359,7 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
      * Create a Bitmap with the content drawn inside the view
      */
     public void getDrawScreenshot(@NonNull final DrawCreatorListener listener) {
-        new AsyncTask<Void, Void, Void>() {
-
-            private int width, height;
-            private Canvas canvas;
-            private Bitmap bitmap;
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                width = getWidth();
-                height = getHeight();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                try {
-                    bitmap = Bitmap.createBitmap(
-                            width, height, Bitmap.Config.ARGB_8888);
-                    canvas = new Canvas(bitmap);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    cancel(true);
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onCancelled() {
-                super.onCancelled();
-
-                if (listener != null) {
-                    listener.onDrawCreationError();
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                draw(canvas);
-                listener.onDrawCreated(bitmap);
-            }
-        }.execute();
+        new TakeScreenShotAsyncTask(listener).execute();
     }
 
 
@@ -669,5 +625,56 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
         void onDrawCreated(Bitmap draw);
 
         void onDrawCreationError();
+    }
+
+
+    class TakeScreenShotAsyncTask extends AsyncTask<Void, Void, Void> {
+        private int mWidth, mHeight;
+        private Canvas mCanvas;
+        private Bitmap mBitmap;
+        private DrawCreatorListener mListener;
+
+        public TakeScreenShotAsyncTask(DrawCreatorListener listener) {
+            mListener = listener;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mWidth = getWidth();
+            mHeight = getHeight();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                mBitmap = Bitmap.createBitmap(
+                        mWidth, mHeight, Bitmap.Config.ARGB_8888);
+                mCanvas = new Canvas(mBitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+                cancel(true);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+
+            if (mListener != null) {
+                mListener.onDrawCreationError();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            draw(mCanvas);
+            mListener.onDrawCreated(mBitmap);
+        }
     }
 }
