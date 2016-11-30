@@ -15,7 +15,6 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -484,10 +483,8 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
 
-                Log.e(TAG, "History point");
             } else {// Else draw the complete path
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
-                Log.e(TAG, "History path");
             }
         }
 
