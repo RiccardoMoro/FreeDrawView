@@ -495,6 +495,10 @@ public class RMFreeDrawView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
+        if (getParent() != null) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+
         // Clear all the history when restarting to draw
         mCanceledPaths.clear();
 
