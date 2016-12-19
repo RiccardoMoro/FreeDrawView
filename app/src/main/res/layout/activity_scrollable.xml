@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/signature_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="16dp"
+                android:text="@string/signature_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+            <com.rm.freedraw.FreeDrawView
+                android:id="@+id/draw_signature"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/signature_label"
+                android:background="@color/lightGrey"
+                app:paintColor="@color/black"
+                app:paintWidth="@dimen/signature_paint_width"
+                app:resizeBehaviour="fitInside"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/draw_signature"
+                android:padding="4dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/signature_hint"
+                    android:inputType="textCapWords"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_name"
+                android:padding="4dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edit_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/age_hint"
+                    android:inputType="numberDecimal"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_captions_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/input_age"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:text="Draw a happy below"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:padding="8dp"
+                    android:text="Draw a sad emoji below"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_draw_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/layout_captions_emoji"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <com.rm.freedraw.FreeDrawView
+                    android:id="@+id/draw_smile"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:paintColor="@color/yellow"
+                    app:paintWidth="12dp"
+                    app:resizeBehaviour="fitInside"/>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/lightGrey"/>
+
+                <com.rm.freedraw.FreeDrawView
+                    android:id="@+id/draw_sad"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:paintColor="@color/red"
+                    app:paintWidth="12dp"
+                    app:resizeBehaviour="fitInside"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_tree_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_draw_emoji"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="What about a leaf here?"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+
+            <com.rm.freedraw.FreeDrawView
+                android:id="@+id/draw_leaf"
+                android:layout_width="180dp"
+                android:layout_height="240dp"
+                android:layout_below="@+id/txt_tree_label"
+                android:layout_centerHorizontal="true"
+                app:paintColor="@color/green"
+                app:paintWidth="8dp"
+                app:resizeBehaviour="fitInside"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/draw_leaf"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="This should be enough to show how this works within scrollable views"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

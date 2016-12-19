@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.rm.freedrawsample.ActivityMain">
+              tools:context="com.rm.freedrawsample.ActivityDraw">
 
     <ImageView
         android:id="@+id/img_screen"
@@ -13,7 +13,7 @@
         android:scaleType="fitCenter"
         android:visibility="gone"/>
 
-    <com.rm.rmfreedraw.RMFreeDrawView
+    <com.rm.freedraw.FreeDrawView
         android:id="@+id/free_draw_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -4,6 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="lightGrey">#A1A1A1</color>
+    <color name="red">#F44336</color>
+    <color name="green">#4CAF50</color>
+    <color name="yellow">#FDD835</color>
 
     <array name="material_colors">
         <item name="red_300" type="color">#f36c60</item>

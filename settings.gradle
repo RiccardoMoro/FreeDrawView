@@ -1,1 +1,1 @@
-include ':app', ':rmfreedraw'
+include ':app', ':freedraw'
