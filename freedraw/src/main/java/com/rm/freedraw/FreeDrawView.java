@@ -400,14 +400,11 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         if (a != null) {
             int resizeBehaviour = a.getInt(R.styleable.FreeDrawView_resizeBehaviour, -1);
-            if (resizeBehaviour != -1) {
-                mResizeBehaviour =
-                        resizeBehaviour == 0 ? ResizeBehaviour.CLEAR :
-                                resizeBehaviour == 1 ? ResizeBehaviour.FIT_XY :
-                                        resizeBehaviour == 2 ? ResizeBehaviour.FIT_INSIDE :
-                                                resizeBehaviour == 3 ? ResizeBehaviour.CROP :
-                                                        ResizeBehaviour.FIT_INSIDE;
-            }
+            mResizeBehaviour =
+                    resizeBehaviour == 0 ? ResizeBehaviour.CLEAR :
+                            resizeBehaviour == 1 ? ResizeBehaviour.FIT_XY :
+                                    resizeBehaviour == 2 ? ResizeBehaviour.CROP :
+                                            ResizeBehaviour.CROP;
         }
 
         initFillPaint();
@@ -567,22 +564,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             mCanceledPaths.clear();
             mPoints.clear();
             return;
-        } else if (mResizeBehaviour == ResizeBehaviour.FIT_INSIDE) {
-
-            if (xMultiplyFactor > 1 || yMultiplyFactor <= 1) {
-                // If fit inside, just use the lowest among the scale factors
-                if (xMultiplyFactor < yMultiplyFactor) {
-                    yMultiplyFactor = xMultiplyFactor;
-                } else {
-                    xMultiplyFactor = yMultiplyFactor;
-                }
-            } else {
-                if (xMultiplyFactor > yMultiplyFactor) {
-                    yMultiplyFactor = xMultiplyFactor;
-                } else {
-                    xMultiplyFactor = yMultiplyFactor;
-                }
-            }
         } else if (mResizeBehaviour == ResizeBehaviour.CROP) {
             xMultiplyFactor = yMultiplyFactor = 1;
         }
