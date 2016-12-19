@@ -638,7 +638,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         private Bitmap mBitmap;
         private DrawCreatorListener mListener;
 
-        public TakeScreenShotAsyncTask(DrawCreatorListener listener) {
+        public TakeScreenShotAsyncTask(@NonNull DrawCreatorListener listener) {
             mListener = listener;
         }
 
@@ -678,7 +678,10 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             super.onPostExecute(aVoid);
 
             draw(mCanvas);
-            mListener.onDrawCreated(mBitmap);
+
+            if (mListener != null) {
+                mListener.onDrawCreated(mBitmap);
+            }
         }
     }
 }
