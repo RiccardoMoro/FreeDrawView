@@ -15,6 +15,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -69,8 +70,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         setOnTouchListener(this);
 
-        setBackgroundColor(Color.WHITE);
-
         TypedArray a = null;
         try {
 
@@ -94,7 +93,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         Parcelable superState = super.onSaveInstanceState();
 
         if (mPoints.size() > 0) {// Currently doing a line, save it's current path
-            createPathFromPoints();
+            createHistoryPathFromPoints();
         }
 
         return new FreeDrawSavedState(superState, mPaths, mCanceledPaths,
@@ -423,6 +422,10 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     @Override
     protected void onDraw(Canvas canvas) {
 
+        if (mPaths.size() == 0 && mPoints.size() == 0) {
+            return;
+        }
+
         // Avoid concurrency errors by first setting the finished path variable to false
         final boolean finishedPath = mFinishPath;
         mFinishPath = false;
@@ -432,11 +435,12 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
             // If the path is just a single point, draw as a point
             if (currentPath.isPoint()) {
+
                 setupFillPaint(currentPath.getPaint());
                 canvas.drawCircle(currentPath.getOriginX(), currentPath.getOriginY(),
                         currentPath.getPaint().getStrokeWidth() / 2, mFillPaint);
-
             } else {// Else draw the complete path
+
                 canvas.drawPath(currentPath.getPath(), currentPath.getPaint());
             }
         }
@@ -449,10 +453,11 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         // If a single point, add a circle to the path
         if (mPoints.size() == 1 || FreeDrawHelper.isAPoint(mPoints)) {
+
             setupFillPaint(mCurrentPaint);
             canvas.drawCircle(mPoints.get(0).x, mPoints.get(0).y,
                     mCurrentPaint.getStrokeWidth() / 2, mFillPaint);
-        } else {// Else draw the complete series of points
+        } else if (mPoints.size() != 0) {// Else draw the complete series of points
 
             boolean first = true;
 
@@ -464,28 +469,28 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                     mCurrentPath.moveTo(point.x, point.y);
                     first = false;
                 } else {
-                    mCurrentPath.lineTo(mPoints.get(i).x, mPoints.get(i).y);
+                    mCurrentPath.lineTo(point.x, point.y);
                 }
             }
+
+            canvas.drawPath(mCurrentPath, mCurrentPaint);
         }
 
         // If the path is finished, add it to the history
         if (finishedPath && mPoints.size() > 0) {
-            createPathFromPoints();
+            createHistoryPathFromPoints();
         }
-
-        canvas.drawPath(mCurrentPath, mCurrentPaint);
     }
 
     // Create a path from the current points
-    private void createPathFromPoints() {
+    private void createHistoryPathFromPoints() {
         mPaths.add(new HistoryPath(
                 new SerializablePath(mCurrentPath), new SerializablePaint(mCurrentPaint),
                 mPoints.get(0).x, mPoints.get(0).y, FreeDrawHelper.isAPoint(mPoints)));
+
         mPoints.clear();
 
         notifyPathDrawn();
-
         notifyRedoUndoCountChanged();
     }
 
