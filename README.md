@@ -9,9 +9,11 @@ This View works flawlessly inside Scrolling parents like NestedScrollView. <br /
 Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" <br />
 and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
 
+[Changelog] (CHANGELOG.md)<br />
+
 <br />
 You can try the demo app on google play store. <br />
-TODO link <br />
+coming soon <br />
 
 Download
 ------
@@ -57,12 +59,80 @@ public class MainActivity extends AppCompatActivity {
         mSignatureView.setPaintColor(Color.BLACK);
         mSignatureView.setPaintWidthPx(getResources.getDimensionPixelSize(R.dimen.paint_width));
         //mSignatureView.setPaintWidthPx(12);
-        //TODO other attributes
+        mSignatureView.setPaintWidthDp(getResources.getDimension(R.dimen.paint_width));
+        //mSignatureView.setPaintWidthDp(6);
+        mSignatureView.setPaintAlpha(255);// from 0 to 255
+        mSignatureView.setResizeBehaviour(ResizeBehaviour.CROP);// Must be one of ResizeBehaviour
+                                                                // values;
+
+        // This listener will be notified every time the path done and undone count changes
+        mSignatureView.setPathRedoUndoCountChangeListener(new PathRedoUndoCountChangeListener() {
+                                  @Override
+                                  public void onUndoCountChanged(int undoCount) {
+                                      // The undoCount is the number of the paths that can be undone
+                                  }
+
+                                  @Override
+                                  public void onRedoCountChanged(int redoCount) {
+                                      // The redoCount is the number of path removed that can be
+                                      // redrawn
+                                  }
+                              });
+        // This listener will be notified every time a new path has been drawn
+        mSignatureView.setOnPathDrawnListener(new PathDrawnListener() {
+                    @Override
+                    public void onNewPathDrawn() {
+
+                    }
+                });
+
+        // This will take a screenshot of the current drawn content of the view
+        mSignatureView.getDrawScreenshot(new FreeDrawView.DrawCreatorListener() {
+                                  @Override
+                                  public void onDrawCreated(Bitmap draw) {
+                                      // The draw Bitmap is the drawn content of the View
+                                  }
+
+                                  @Override
+                                  public void onDrawCreationError() {
+                                      // Something went wrong creating the bitmap, should never
+                                      // happen unless the async task has been canceled
+                                  }
+                              });
     }
 }
 ```
 
-//TODO XML attributes
+<br />
+
+####Supported Attributes
+FreeDrawView
+------
+| XML Attribute                 | Java method                                                     	| Description                                                                                                     	| Default value                                      	                                        |
+|-------------------------	    |-----------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------------------	|---------------------------------------------------------------------------------------------  |
+| paintColor                  	| setPaintColor(@ColorInt int checked)                              | Set the color of the paint                                                                                      	| Color.BLACK                                              	                                    |
+| paintWidth                  	| setPaintWidthPx(@FloatRange(from = 0) float widthPx)              | Set the width of the paint in pixels 	                                                                            | 4dp                                               	                                        |
+|                       	    | setPaintWidthDp(float dp)                                        	| Set the width of the paint in dp                                                                                  | 4dp                                                	                                        |
+| paintAlpha            	    | setPaintAlpha(@IntRange(from = 0, to = 255) int alpha)            | Set the alpha of the paint                                                                                       	| 255                                                	                                        |
+| resizeBehaviour        	    | setResizeBehaviour(ResizeBehaviour newBehaviour)                	| The behaviour of the view every time it is resized (on rotation for example) one of [clear, fitXY, crop]          | ResizeBehaviour.CROP                          	                                            |
+
+<br />
+
+####Limitations and TODO
+<br />
+* Multitouch drawing is not supported <br />
+
+<br />
+
+Also, the FreeDrawView class gives some utility methods to handle path history: <br />
+* ```public void undoLast()``` <br />
+    This method undo the last drawn segment <br /> <br />
+* ```public void redoLast()``` <br />
+    This method redraw the last undone segment  <br /> <br />
+* ```public void undoAll()``` <br />
+    This method undo all the drawn segments, can be redone one by one or all in one <br /> <br />
+* ```public void redoAll()``` <br />
+    This method redraw all the undone segments <br /> <br />
 
 License
 --------

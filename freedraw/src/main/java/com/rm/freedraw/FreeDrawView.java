@@ -15,7 +15,6 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -272,20 +271,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     /**
-     * Re-add all the removed paths and redraw
-     */
-    public void redoAll() {
-
-        if (mCanceledPaths.size() > 0) {
-            mPaths.addAll(mCanceledPaths);
-            mCanceledPaths.clear();
-            invalidate();
-
-            notifyRedoUndoCountChanged();
-        }
-    }
-
-    /**
      * Re-add the first removed path and redraw
      */
     public void redoLast() {
@@ -302,13 +287,27 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     /**
      * Remove all the paths and redraw (can be undone with {@link #redoLast()})
      */
-    public void clearAll() {
+    public void undoAll() {
         Collections.reverse(mPaths);
         mCanceledPaths.addAll(mPaths);
         mPaths.clear();
         invalidate();
 
         notifyRedoUndoCountChanged();
+    }
+
+    /**
+     * Re-add all the removed paths and redraw
+     */
+    public void redoAll() {
+
+        if (mCanceledPaths.size() > 0) {
+            mPaths.addAll(mCanceledPaths);
+            mCanceledPaths.clear();
+            invalidate();
+
+            notifyRedoUndoCountChanged();
+        }
     }
 
     /**
