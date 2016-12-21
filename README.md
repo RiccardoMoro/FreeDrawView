@@ -3,17 +3,16 @@ FreeDrawView
 
 <img src="TODO sample image" title="sample" />
 
-A View that let you draw freely on it. You can customize paint width, alpha and color.
-Can be useful for notes app, signatures or hands-free writing<br />
-This View works flawlessly inside Scrolling parents like NestedScrollView. <br />
-Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" <br />
-and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
+A View that let you draw freely on it. You can customize paint width, alpha and color. Can be useful for notes app, signatures or hands-free writing<br />
+This View works flawlessly inside Scrolling parents like NestedScrollView. Be careful with lists, you need to restore manually the draw state!<br />
+Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
 
 [Changelog] (CHANGELOG.md)<br />
 
 <br />
 You can try the demo app on google play store. <br />
-coming soon <br />
+coming soon
+<br />
 
 Download
 ------
@@ -21,6 +20,10 @@ Download
 ```groovy
 TODO artifact
 ```
+
+<br />
+<b>Min SDK version: 9 (Android 2.3) </b>
+<br />
 
 ## Usage
 
