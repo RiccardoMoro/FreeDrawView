@@ -2,9 +2,9 @@ FreeDrawView
 ======
 
 <img src="sample.gif" title="sample" /> <br />
-A View that let you draw freely on it. You can customize paint width, alpha and color. Can be useful for notes app, signatures or hands-free writing<br />
+A View that let you draw freely on it. You can customize paint width, alpha and color. Can be useful for notes app, signatures or hands-free writing<br /><br />
 <img src="sample_scrollable.gif" title="sample" /> <br />
-This View works flawlessly inside Scrolling parents like NestedScrollView. Be careful with lists, you need to restore manually the draw state!<br />
+This View works flawlessly inside Scrolling parents like NestedScrollView. Be careful with lists, you need to restore manually the draw state!<br /><br />
 <img src="sample_rotation.gif" title="sample" /> <br />
 Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
 
