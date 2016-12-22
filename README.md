@@ -1,8 +1,6 @@
 FreeDrawView
 ======
 
-[![FreeDrawViewSample](http://img.youtube.com/vi/WYEni8luLns/0.jpg)](http://www.youtube.com/watch?v=WYEni8luLns)
-
 A View that let you draw freely on it. You can customize paint width, alpha and color. Can be useful for notes app, signatures or hands-free writing<br />
 This View works flawlessly inside Scrolling parents like NestedScrollView. Be careful with lists, you need to restore manually the draw state!<br />
 Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
@@ -11,8 +9,9 @@ Also supports state-restore on rotation, with custom behaviours like "clear, cro
 
 <br />
 You can try the demo app on google play store. <br />
-coming soon
-<br />
+coming soon <br /> <br />
+Or see the full video demo on YouTube. <br />
+https://youtu.be/WYEni8luLns <br /> <br />
 
 Download
 ------
