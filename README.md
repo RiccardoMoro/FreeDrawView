@@ -124,7 +124,6 @@ FreeDrawView
 <br />
 
 ####Limitations and TODO
-<br />
 * Multitouch drawing is not supported <br />
 
 <br />
