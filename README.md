@@ -1,7 +1,7 @@
 FreeDrawView
 ======
 
-<img src="TODO sample image" title="sample" />
+[![FreeDrawViewSample](http://img.youtube.com/vi/WYEni8luLns/0.jpg)](http://www.youtube.com/watch?v=WYEni8luLns)
 
 A View that let you draw freely on it. You can customize paint width, alpha and color. Can be useful for notes app, signatures or hands-free writing<br />
 This View works flawlessly inside Scrolling parents like NestedScrollView. Be careful with lists, you need to restore manually the draw state!<br />
@@ -36,6 +36,7 @@ To use this library, just add this inside your layout file
                     android:layout_height="match_parent"
                     android:background="@color/white"
 
+                    app:paintAlpha="255"
                     app:paintColor="@color/black"
                     app:paintWidth="4dp"
                     app:resizeBehaviour="crop"/>
@@ -77,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                                   @Override
                                   public void onRedoCountChanged(int redoCount) {
-                                      // The redoCount is the number of path removed that can be
-                                      // redrawn
+                                      // The redoCount is the number of path removed that can be redrawn
                                   }
                               });
         // This listener will be notified every time a new path has been drawn
@@ -136,6 +136,10 @@ Also, the FreeDrawView class gives some utility methods to handle path history: 
     This method undo all the drawn segments, can be redone one by one or all in one <br /> <br />
 * ```public void redoAll()``` <br />
     This method redraw all the undone segments <br /> <br />
+
+<br />
+You can set a PathDrawnListener to be notified every time a new path is drawn or a PathRedoUndoCountChangeListener to be notified when the undo or redo count changes. <br />
+<br />
 
 License
 --------
