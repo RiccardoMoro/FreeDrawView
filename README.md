@@ -20,7 +20,7 @@ Download
 ------
 ####Gradle:
 ```groovy
-TODO artifact
+compile 'com.rm:freedrawview:1.0.0'
 ```
 
 <br />
