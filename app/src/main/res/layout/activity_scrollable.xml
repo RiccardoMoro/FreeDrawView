@@ -21,7 +21,7 @@
                 android:text="@string/signature_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-            <com.rm.freedraw.FreeDrawView
+            <com.rm.freedrawview.FreeDrawView
                 android:id="@+id/draw_signature"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -96,7 +96,7 @@
                 android:layout_marginTop="6dp"
                 android:orientation="horizontal">
 
-                <com.rm.freedraw.FreeDrawView
+                <com.rm.freedrawview.FreeDrawView
                     android:id="@+id/draw_smile"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -111,7 +111,7 @@
                     android:layout_height="match_parent"
                     android:background="@color/lightGrey"/>
 
-                <com.rm.freedraw.FreeDrawView
+                <com.rm.freedrawview.FreeDrawView
                     android:id="@+id/draw_sad"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -132,7 +132,7 @@
                 android:text="What about a leaf here?"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
-            <com.rm.freedraw.FreeDrawView
+            <com.rm.freedrawview.FreeDrawView
                 android:id="@+id/draw_leaf"
                 android:layout_width="180dp"
                 android:layout_height="240dp"

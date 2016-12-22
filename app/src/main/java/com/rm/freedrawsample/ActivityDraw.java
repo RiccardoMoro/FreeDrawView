@@ -12,8 +12,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rm.freedraw.FreeDrawView;
-import com.rm.freedraw.PathRedoUndoCountChangeListener;
+import com.rm.freedrawview.FreeDrawView;
+import com.rm.freedrawview.PathRedoUndoCountChangeListener;
 
 public class ActivityDraw extends AppCompatActivity
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,

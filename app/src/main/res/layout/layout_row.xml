@@ -4,7 +4,7 @@
               android:layout_height="200dp"
               android:orientation="horizontal">
 
-    <com.rm.freedraw.FreeDrawView
+    <com.rm.freedrawview.FreeDrawView
         android:id="@+id/item_draw_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
