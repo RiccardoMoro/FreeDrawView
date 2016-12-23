@@ -22,6 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile project(path: ':freedraw')
+    compile project(path: ':freedrawview')
     compile 'com.android.support:design:25.1.0'
 }

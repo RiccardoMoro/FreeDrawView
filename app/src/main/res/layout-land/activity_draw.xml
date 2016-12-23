@@ -13,11 +13,12 @@
         android:scaleType="fitCenter"
         android:visibility="gone"/>
 
-    <com.rm.freedraw.FreeDrawView
+    <com.rm.freedrawview.FreeDrawView
         android:id="@+id/free_draw_view"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@color/white"/>
 
     <RelativeLayout
         android:id="@+id/side_view"

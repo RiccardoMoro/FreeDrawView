@@ -1,1 +1,1 @@
-include ':app', ':freedraw'
+include ':app', ':freedrawview'

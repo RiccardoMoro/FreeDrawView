@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.rm.freedraw.FreeDrawView;
+import com.rm.freedrawview.FreeDrawView;
 
 /**
  * Created by Riccardo on 01/12/16.

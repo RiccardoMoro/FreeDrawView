@@ -25,7 +25,7 @@
 
         <activity
             android:name=".ActivityScrollable"
-            android:screenOrientation="fullSensor"/>
+            android:screenOrientation="userPortrait"/>
     </application>
 
 </manifest>
