@@ -14,7 +14,7 @@ Also supports state-restore on rotation, with custom behaviours like "clear, cro
 You can try the demo app on google play store. <br />
 coming soon <br /> <br />
 Or see the full video demo on YouTube. <br />
-https://youtu.be/WYEni8luLns <br /> <br />
+https://youtu.be/ejEdq4lnPjc <br /> <br />
 
 Download
 ------
