@@ -420,7 +420,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         if (mPaths.size() == 0 && mPoints.size() == 0) {
             return;
         }
@@ -496,6 +495,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            mPathDrawnListener.onPathStart();
+        }
         if (getParent() != null) {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
