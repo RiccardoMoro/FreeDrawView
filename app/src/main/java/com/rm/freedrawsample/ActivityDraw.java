@@ -3,6 +3,7 @@ package com.rm.freedrawsample;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rm.freedrawview.FreeDrawView;
+import com.rm.freedrawview.PathDrawnListener;
 import com.rm.freedrawview.PathRedoUndoCountChangeListener;
 
 public class ActivityDraw extends AppCompatActivity
@@ -47,6 +49,18 @@ public class ActivityDraw extends AppCompatActivity
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
         mFreeDrawView = (FreeDrawView) findViewById(R.id.free_draw_view);
+        mFreeDrawView.setOnPathDrawnListener(new PathDrawnListener() {
+            @Override
+            public void onNewPathDrawn() {
+                Log.d("FREEDRAW", "Path Drawn");
+            }
+
+            @Override
+            public void onPathStart() {
+                Log.d("FREEDRAW", "Drawing Path");
+
+            }
+        });
         mFreeDrawView.setPathRedoUndoCountChangeListener(this);
 
         mSideView = findViewById(R.id.side_view);
