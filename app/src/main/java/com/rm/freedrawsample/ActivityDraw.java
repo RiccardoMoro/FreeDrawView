@@ -3,7 +3,6 @@ package com.rm.freedrawsample;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.rm.freedrawview.PathRedoUndoCountChangeListener;
 
 public class ActivityDraw extends AppCompatActivity
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,
-        PathRedoUndoCountChangeListener, FreeDrawView.DrawCreatorListener {
+        PathRedoUndoCountChangeListener, FreeDrawView.DrawCreatorListener, PathDrawnListener {
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -49,18 +48,7 @@ public class ActivityDraw extends AppCompatActivity
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
 
         mFreeDrawView = (FreeDrawView) findViewById(R.id.free_draw_view);
-        mFreeDrawView.setOnPathDrawnListener(new PathDrawnListener() {
-            @Override
-            public void onNewPathDrawn() {
-                Log.d("FREEDRAW", "Path Drawn");
-            }
-
-            @Override
-            public void onPathStart() {
-                Log.d("FREEDRAW", "Drawing Path");
-
-            }
-        });
+        mFreeDrawView.setOnPathDrawnListener(this);
         mFreeDrawView.setPathRedoUndoCountChangeListener(this);
 
         mSideView = findViewById(R.id.side_view);
@@ -191,6 +179,7 @@ public class ActivityDraw extends AppCompatActivity
         }
     }
 
+    // PathRedoUndoCountChangeListener.
     @Override
     public void onUndoCountChanged(int undoCount) {
         mTxtUndoCount.setText(String.valueOf(undoCount));
@@ -201,6 +190,19 @@ public class ActivityDraw extends AppCompatActivity
         mTxtRedoCount.setText(String.valueOf(redoCount));
     }
 
+    // PathDrawnListener
+    @Override
+    public void onNewPathDrawn() {
+        // The user finished drawing a path
+    }
+
+    @Override
+    public void onPathStart() {
+        // The user has started drawing a path
+    }
+
+
+    // DrawCreatorListener
     @Override
     public void onDrawCreated(Bitmap draw) {
         mSideView.setVisibility(View.GONE);

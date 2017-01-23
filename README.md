@@ -20,7 +20,7 @@ Download
 ------
 ####Gradle:
 ```groovy
-compile 'com.rm:freedrawview:1.0.0'
+compile 'com.rm:freedrawview:1.0.1'
 ```
 
 <br />
@@ -139,13 +139,15 @@ Also, the FreeDrawView class gives some utility methods to handle path history: 
     This method redraw all the undone segments <br /> <br />
 
 <br />
-You can set a PathDrawnListener to be notified every time a new path is drawn or a PathRedoUndoCountChangeListener to be notified when the undo or redo count changes. <br />
+You can set: <br/>
+* PathDrawnListener to be notified every time the user starts finishes drawing a line. <br />
+* PathRedoUndoCountChangeListener to be notified when the undo or redo count changes. <br />
 <br />
 
 License
 --------
 
-    Copyright 2016 Riccardo Moro.
+    Copyright 2017 Riccardo Moro.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
