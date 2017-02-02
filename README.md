@@ -124,7 +124,8 @@ FreeDrawView
 <br />
 
 ####Limitations and TODO
-* Multitouch drawing is not supported <br />
+* Multitouch drawing is currently not supported <br />
+* Eraser is not yet implemented <br />
 
 <br />
 
@@ -140,7 +141,7 @@ Also, the FreeDrawView class gives some utility methods to handle path history: 
 
 <br />
 You can set: <br/>
-* PathDrawnListener to be notified every time the user starts finishes drawing a line. <br />
+* PathDrawnListener to be notified every time the user starts or finishes drawing a line. <br />
 * PathRedoUndoCountChangeListener to be notified when the undo or redo count changes. <br />
 <br />
 
