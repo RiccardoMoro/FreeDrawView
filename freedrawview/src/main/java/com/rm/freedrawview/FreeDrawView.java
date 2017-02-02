@@ -362,12 +362,17 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
 
     // Internal methods
+    private void notifyPathStart() {
+        if (mPathDrawnListener != null) {
+            mPathDrawnListener.onPathStart();
+        }
+    }
+
     private void notifyPathDrawn() {
         if (mPathDrawnListener != null) {
             mPathDrawnListener.onNewPathDrawn();
         }
     }
-
 
     private void notifyRedoUndoCountChanged() {
         if (mPathRedoUndoCountChangeListener != null) {
@@ -495,8 +500,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
 
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            mPathDrawnListener.onPathStart();
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            notifyPathStart();
         }
         if (getParent() != null) {
             getParent().requestDisallowInterceptTouchEvent(true);

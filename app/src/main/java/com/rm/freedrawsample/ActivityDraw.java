@@ -193,7 +193,7 @@ public class ActivityDraw extends AppCompatActivity
     // PathDrawnListener
     @Override
     public void onNewPathDrawn() {
-        // The user finished drawing a path
+        // The user has finished drawing a path
     }
 
     @Override

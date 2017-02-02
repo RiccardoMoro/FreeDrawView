@@ -20,7 +20,7 @@ Download
 ------
 ####Gradle:
 ```groovy
-compile 'com.rm:freedrawview:1.0.1'
+compile 'com.rm:freedrawview:1.0.2'
 ```
 
 <br />
@@ -87,7 +87,12 @@ public class MainActivity extends AppCompatActivity {
         mSignatureView.setOnPathDrawnListener(new PathDrawnListener() {
                     @Override
                     public void onNewPathDrawn() {
+                        // The user has finished drawing a path
+                    }
 
+                    @Override
+                    public void onPathStart() {
+                        // The user has started drawing a path
                     }
                 });
 
