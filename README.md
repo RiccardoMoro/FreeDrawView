@@ -32,7 +32,7 @@ compile 'com.rm:freedrawview:1.0.2'
 To use this library, just add this inside your layout file
 
 ```xml
-    <com.rm.freedraw.FreeDrawView
+    <com.rm.freedrawview.FreeDrawView
                     android:id="@+id/your_id"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
