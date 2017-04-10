@@ -8,9 +8,8 @@ This View works flawlessly inside Scrolling parents like NestedScrollView. Be ca
 <img src="sample_rotation.gif" title="sample" /> <br />
 Also supports state-restore on rotation, with custom behaviours like "clear, crop or fitXY" and you can take a screenshot (given to you as a Bitmap Object) of the View drawn content<br />
 
-[Changelog] (CHANGELOG.md)<br />
+[Changelog](CHANGELOG.md)<br />
 
-<br />
 You can try the demo app on google play store. <br />
 coming soon <br /> <br />
 Or see the full video demo on YouTube. <br />
@@ -18,7 +17,7 @@ https://youtu.be/ejEdq4lnPjc <br /> <br />
 
 Download
 ------
-####Gradle:
+#### Gradle:
 ```groovy
 compile 'com.rm:freedrawview:1.0.2'
 ```
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
 <br />
 
-####Supported Attributes
+#### Supported Attributes
 FreeDrawView
 ------
 | XML Attribute                 | Java method                                                     	| Description                                                                                                     	| Default value                                      	                                        |
@@ -128,7 +127,7 @@ FreeDrawView
 
 <br />
 
-####Limitations and TODO
+#### Limitations and TODO
 * Multitouch drawing is currently not supported <br />
 * Eraser is not yet implemented <br />
 
