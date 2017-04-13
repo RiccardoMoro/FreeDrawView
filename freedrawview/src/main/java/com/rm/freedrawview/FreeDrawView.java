@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.ComposePathEffect;
 import android.graphics.CornerPathEffect;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -50,6 +52,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     private boolean mFinishPath = false;
 
+    private boolean mEraser = false;
+
     // Needed to draw points
     private Paint mFillPaint;
 
@@ -69,6 +73,11 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         setOnTouchListener(this);
 
+        // Required for implementing ERASE feature
+        // See http://stackoverflow.com/a/33483016/990066
+        // setLayerType only available in SDK 11 and above
+        setLayerType(LAYER_TYPE_HARDWARE, mCurrentPaint);
+
         TypedArray a = null;
         try {
 
@@ -83,6 +92,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                 a.recycle();
             }
         }
+
     }
 
     @Override
@@ -425,6 +435,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if (mPaths.size() == 0 && mPoints.size() == 0) {
             return;
         }
@@ -483,6 +494,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         if (finishedPath && mPoints.size() > 0) {
             createHistoryPathFromPoints();
         }
+
     }
 
     // Create a path from the current points
@@ -676,4 +688,18 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             }
         }
     }
+
+    public boolean isEraser() {
+        return mEraser;
+    }
+
+    public void setEraser(boolean mEraser) {
+        this.mEraser = mEraser;
+        if (mEraser) {
+            mCurrentPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        } else {
+            mCurrentPaint.setXfermode(null);
+        }
+    }
+
 }
