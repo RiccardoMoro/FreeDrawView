@@ -30,7 +30,7 @@ public class ActivityDraw extends AppCompatActivity
 
     private FreeDrawView mFreeDrawView;
     private View mSideView;
-    private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
+    private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll, mBtnEraser;
     private SeekBar mThicknessBar, mAlphaBar;
     private TextView mTxtRedoCount, mTxtUndoCount;
 
@@ -56,6 +56,7 @@ public class ActivityDraw extends AppCompatActivity
         mBtnUndo = (Button) findViewById(R.id.btn_undo);
         mBtnRedo = (Button) findViewById(R.id.btn_redo);
         mBtnClearAll = (Button) findViewById(R.id.btn_clear_all);
+        mBtnEraser = (Button) findViewById(R.id.btn_eraser);
         mThicknessBar = (SeekBar) findViewById(R.id.slider_thickness);
         mAlphaBar = (SeekBar) findViewById(R.id.slider_alpha);
 
@@ -63,6 +64,7 @@ public class ActivityDraw extends AppCompatActivity
         mBtnUndo.setOnClickListener(this);
         mBtnRedo.setOnClickListener(this);
         mBtnClearAll.setOnClickListener(this);
+        mBtnEraser.setOnClickListener(this);
 
         mAlphaBar.setMax((ALPHA_MAX - ALPHA_MIN) / ALPHA_STEP);
         mAlphaBar.setProgress(mFreeDrawView.getPaintAlpha());
@@ -140,6 +142,17 @@ public class ActivityDraw extends AppCompatActivity
 
         if (id == mBtnClearAll.getId()) {
             mFreeDrawView.undoAll();
+        }
+
+        if (id == mBtnEraser.getId()) {
+            // toggle pen/eraser
+            if (mFreeDrawView.isEraser()) {
+                mFreeDrawView.setEraser(false);
+                mBtnEraser.setText("Eraser");
+            } else {
+                mFreeDrawView.setEraser(true);
+                mBtnEraser.setText("Pen");
+            }
         }
     }
 
