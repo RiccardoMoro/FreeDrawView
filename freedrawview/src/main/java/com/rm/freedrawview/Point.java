@@ -3,29 +3,34 @@ package com.rm.freedrawview;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Riccardo Moro on 9/25/2016.
  */
 
-class Point implements Parcelable {
+class Point implements Parcelable, Serializable {
+
+    static final long serialVersionUID = 42L;
+
     float x, y;
 
     Point() {
         x = y = -1;
     }
 
+    @Override
+    public String toString() {
+        return "" + x + " : " + y + " - ";
+    }
+
+
+    // Parcelable stuff
     private Point(Parcel in) {
         x = in.readFloat();
         y = in.readFloat();
     }
 
-    @Override
-    public String toString() {
-        return "" + x + "," + y;
-    }
-
-
-    // Parcelable stuff
     @Override
     public int describeContents() {
         return 0;
@@ -49,5 +54,4 @@ class Point implements Parcelable {
             return new Point[size];
         }
     };
-
 }

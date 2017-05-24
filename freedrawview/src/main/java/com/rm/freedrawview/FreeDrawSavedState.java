@@ -1,5 +1,6 @@
 package com.rm.freedrawview;
 
+import android.graphics.Paint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 
 class FreeDrawSavedState extends View.BaseSavedState {
 
-    private ArrayList<HistoryPath> mCanceledPaths;
-    private ArrayList<HistoryPath> mPaths;
-    private SerializablePaint mCurrentPaint;
+    private ArrayList<HistoryPath> mPaths = new ArrayList<>();
+    private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
 
     private int mPaintColor;
     private int mPaintAlpha;
+    private float mPaintWidth;
 
     private ResizeBehaviour mResizeBehaviour;
 
@@ -27,14 +28,14 @@ class FreeDrawSavedState extends View.BaseSavedState {
     private int mLastDimensionH;
 
     FreeDrawSavedState(Parcelable superState, ArrayList<HistoryPath> paths,
-                       ArrayList<HistoryPath> canceledPaths, SerializablePaint currentPaint,
+                       ArrayList<HistoryPath> canceledPaths, float paintWidth,
                        int paintColor, int paintAlpha, ResizeBehaviour resizeBehaviour,
                        int lastDimensionW, int lastDimensionH) {
         super(superState);
 
         mPaths = paths;
         mCanceledPaths = canceledPaths;
-        mCurrentPaint = currentPaint;
+        mPaintWidth = paintWidth;
 
         mPaintColor = paintColor;
         mPaintAlpha = paintAlpha;
@@ -45,32 +46,75 @@ class FreeDrawSavedState extends View.BaseSavedState {
         mLastDimensionH = lastDimensionH;
     }
 
+    ArrayList<HistoryPath> getPaths() {
+        return mPaths;
+    }
+
+    ArrayList<HistoryPath> getCanceledPaths() {
+        return mCanceledPaths;
+    }
+
+    @ColorInt
+    int getPaintColor() {
+        return mPaintColor;
+    }
+
+    @IntRange(from = 0, to = 255)
+    int getPaintAlpha() {
+        return mPaintAlpha;
+    }
+
+    float getCurrentPaintWidth() {
+        return mPaintWidth;
+    }
+
+    Paint getCurrentPaint() {
+
+        Paint paint = FreeDrawHelper.createPaint();
+        FreeDrawHelper.setupStrokePaint(paint);
+        FreeDrawHelper.copyFromValues(paint, mPaintColor, mPaintAlpha, mPaintWidth, true);
+        return paint;
+    }
+
+    ResizeBehaviour getResizeBehaviour() {
+        return mResizeBehaviour;
+    }
+
+    int getLastDimensionW() {
+        return mLastDimensionW;
+    }
+
+    int getLastDimensionH() {
+        return mLastDimensionH;
+    }
+
+    // Parcelable stuff
     private FreeDrawSavedState(Parcel in) {
         super(in);
-        try {
-            mPaths = in.readArrayList(HistoryPath.class.getClassLoader());
-            mCanceledPaths = in.readArrayList(HistoryPath.class.getClassLoader());
 
-            mPaintColor = in.readInt();
-            mPaintAlpha = in.readInt();
+        in.readTypedList(mPaths, HistoryPath.CREATOR);
+        in.readTypedList(mCanceledPaths, HistoryPath.CREATOR);
 
-            mResizeBehaviour = (ResizeBehaviour) in.readSerializable();
+        mPaintColor = in.readInt();
+        mPaintAlpha = in.readInt();
+        mPaintWidth = in.readFloat();
 
-            mLastDimensionW = in.readInt();
-            mLastDimensionH = in.readInt();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mResizeBehaviour = (ResizeBehaviour) in.readSerializable();
+
+        mLastDimensionW = in.readInt();
+        mLastDimensionH = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
         super.writeToParcel(out, flags);
+
         out.writeTypedList(mPaths);
         out.writeTypedList(mCanceledPaths);
 
         out.writeInt(mPaintColor);
         out.writeInt(mPaintAlpha);
+        out.writeFloat(mPaintWidth);
 
         out.writeSerializable(mResizeBehaviour);
 
@@ -89,38 +133,4 @@ class FreeDrawSavedState extends View.BaseSavedState {
                     return new FreeDrawSavedState[size];
                 }
             };
-
-    ArrayList<HistoryPath> getPaths() {
-        return mPaths;
-    }
-
-    ArrayList<HistoryPath> getCanceledPaths() {
-        return mCanceledPaths;
-    }
-
-    SerializablePaint getCurrentPaint() {
-        return mCurrentPaint;
-    }
-
-    @ColorInt
-    int getPaintColor() {
-        return mPaintColor;
-    }
-
-    @IntRange(from = 0, to = 255)
-    int getPaintAlpha() {
-        return mPaintAlpha;
-    }
-
-    ResizeBehaviour getResizeBehaviour() {
-        return mResizeBehaviour;
-    }
-
-    int getLastDimensionW() {
-        return mLastDimensionW;
-    }
-
-    int getLastDimensionH() {
-        return mLastDimensionH;
-    }
 }
