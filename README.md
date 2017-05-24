@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
+#### Save and restore manually the Draw content
 From v1.1.0 you can get the current state of the Draw (as a Serializable object) and than restore it:
 ```java
         FreeDrawSerializableState state = mSignatureView.getCurrentViewStateAsSerializable();// This returns a FreeDrawSerializableState (which implements Serializable)
@@ -158,9 +159,16 @@ Also, the FreeDrawView class gives some utility methods to handle path history: 
     This method redraw all the undone segments <br /> <br />
 
 <br />
-You can set: <br/>
-* PathDrawnListener to be notified every time the user starts or finishes drawing a line. <br />
-* PathRedoUndoCountChangeListener to be notified when the undo or redo count changes. <br />
+
+You can use: <br/>
+* ```setOnPathDrawnListener(PathDrawnListener listener)``` <br />
+to be notified every time the user starts or finishes drawing a line. <br /> <br />
+* ```setPathRedoUndoCountChangeListener(PathRedoUndoCountChangeListener listener)``` <br />
+to be notified when the undo or redo count changes. <br /> <br />
+
+And remove them with: <br/>
+* ```removePathDrawnListener()``` <br />
+* ```removePathRedoUndoCountChangeListener()``` <br />
 <br />
 
 License

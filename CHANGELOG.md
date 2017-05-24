@@ -2,7 +2,7 @@ Changelog
 ---------
 
 #### New from v1.1.0 <br />
-(WIP) <br />
+(24/05/2017) <br />
 -Added option to save and restore the view state #8 <br />
 
 #### New from v1.0.2: <br />
