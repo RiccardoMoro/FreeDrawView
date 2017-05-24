@@ -23,9 +23,9 @@ public class ActivityDraw extends AppCompatActivity
 
     private static final String TAG = ActivityDraw.class.getSimpleName();
 
-    private static final int THICKNESS_STEP = 1;
-    private static final int THICKNESS_MAX = 30;
-    private static final int THICKNESS_MIN = 1;
+    private static final int THICKNESS_STEP = 2;
+    private static final int THICKNESS_MAX = 80;
+    private static final int THICKNESS_MIN = 15;
 
     private static final int ALPHA_STEP = 1;
     private static final int ALPHA_MAX = 255;
@@ -59,8 +59,11 @@ public class ActivityDraw extends AppCompatActivity
         mBtnUndo = (Button) findViewById(R.id.btn_undo);
         mBtnRedo = (Button) findViewById(R.id.btn_redo);
         mBtnClearAll = (Button) findViewById(R.id.btn_clear_all);
-        mThicknessBar = (SeekBar) findViewById(R.id.slider_thickness);
         mAlphaBar = (SeekBar) findViewById(R.id.slider_alpha);
+        mThicknessBar = (SeekBar) findViewById(R.id.slider_thickness);
+
+        mAlphaBar.setOnSeekBarChangeListener(null);
+        mThicknessBar.setOnSeekBarChangeListener(null);
 
         mBtnRandomColor.setOnClickListener(this);
         mBtnUndo.setOnClickListener(this);
@@ -71,15 +74,20 @@ public class ActivityDraw extends AppCompatActivity
 
             // Restore the previous saved state
             FreeDrawSerializableState state = FileHelper.getSavedStoreFromFile(this);
-            mFreeDrawView.restoreStateFromSerializable(state);
+            if (state != null) {
+                mFreeDrawView.restoreStateFromSerializable(state);
+            }
         }
 
         mAlphaBar.setMax((ALPHA_MAX - ALPHA_MIN) / ALPHA_STEP);
-        mAlphaBar.setProgress(mFreeDrawView.getPaintAlpha());
+        int alphaProgress = ((mFreeDrawView.getPaintAlpha() - ALPHA_MIN) / ALPHA_STEP);
+        mAlphaBar.setProgress(alphaProgress);
         mAlphaBar.setOnSeekBarChangeListener(this);
 
         mThicknessBar.setMax((THICKNESS_MAX - THICKNESS_MIN) / THICKNESS_STEP);
-        mThicknessBar.setProgress((int) mFreeDrawView.getPaintWidth());
+        int thicknessProgress = (int)
+                ((mFreeDrawView.getPaintWidth() - THICKNESS_MIN) / THICKNESS_STEP);
+        mThicknessBar.setProgress(thicknessProgress);
         mThicknessBar.setOnSeekBarChangeListener(this);
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
     }
@@ -164,7 +172,7 @@ public class ActivityDraw extends AppCompatActivity
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (seekBar.getId() == mThicknessBar.getId()) {
-            mFreeDrawView.setPaintWidthDp(THICKNESS_MIN + (progress * THICKNESS_STEP));
+            mFreeDrawView.setPaintWidthPx(THICKNESS_MIN + (progress * THICKNESS_STEP));
         } else {
             mFreeDrawView.setPaintAlpha(ALPHA_MIN + (progress * ALPHA_STEP));
         }

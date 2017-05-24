@@ -92,8 +92,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         return new FreeDrawSavedState(superState, mPaths, mCanceledPaths,
-                mCurrentPaint.getStrokeWidth(), mCurrentPaint.getColor(), mCurrentPaint.getAlpha(),
-                mResizeBehaviour, mLastDimensionW, mLastDimensionH);
+                getPaintWidth(), getPaintColor(), getPaintAlpha(),
+                getResizeBehaviour(), mLastDimensionW, mLastDimensionH);
     }
 
     @Override
@@ -114,10 +114,12 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         mCanceledPaths = savedState.getCanceledPaths();
         mCurrentPaint = savedState.getCurrentPaint();
 
-        mResizeBehaviour = savedState.getResizeBehaviour();
+        setPaintWidthPx(savedState.getCurrentPaintWidth());
+        setPaintColor(savedState.getPaintColor());
+        setPaintAlpha(savedState.getPaintAlpha());
 
-        mPaintColor = savedState.getPaintColor();
-        mPaintAlpha = savedState.getPaintAlpha();
+        setResizeBehaviour(savedState.getResizeBehaviour());
+
         // Restore the last dimensions, so that in onSizeChanged i can calculate the
         // height and width change factor and multiply every point x or y to it, so that if the
         // View is resized, it adapt automatically it's points to the new width/height
@@ -133,7 +135,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      * @param color The now color to be applied to the
      */
     public void setPaintColor(@ColorInt int color) {
-        mFinishPath = true;
 
         invalidate();
 
@@ -167,7 +168,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      */
     public void setPaintWidthPx(@FloatRange(from = 0) float widthPx) {
         if (widthPx > 0) {
-            mFinishPath = true;
 
             invalidate();
 
@@ -185,18 +185,18 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     /**
-     * {@link #getPaintWith(boolean)}
+     * {@link #getPaintWidth(boolean)}
      */
     @FloatRange(from = 0)
     public float getPaintWidth() {
-        return getPaintWith(false);
+        return getPaintWidth(false);
     }
 
     /**
      * Get the current paint with in dp or pixel
      */
     @FloatRange(from = 0)
-    public float getPaintWith(boolean inDp) {
+    public float getPaintWidth(boolean inDp) {
         if (inDp) {
             return FreeDrawHelper.convertPixelsToDp(mCurrentPaint.getStrokeWidth());
         } else {
@@ -213,7 +213,6 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     public void setPaintAlpha(@IntRange(from = 0, to = 255) int alpha) {
 
         // Finish current path and redraw, so that the new setting is applied only to the next path
-        mFinishPath = true;
         invalidate();
 
         mPaintAlpha = alpha;
@@ -354,8 +353,8 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      */
     public FreeDrawSerializableState getCurrentViewStateAsSerializable() {
 
-        return new FreeDrawSerializableState(mCanceledPaths, mPaths, mPaintColor,
-                mPaintAlpha, mCurrentPaint.getStrokeWidth(), mResizeBehaviour,
+        return new FreeDrawSerializableState(mCanceledPaths, mPaths, getPaintColor(),
+                getPaintAlpha(), getPaintWidth(), getResizeBehaviour(),
                 mLastDimensionW, mLastDimensionH);
     }
 
@@ -377,10 +376,12 @@ public class FreeDrawView extends View implements View.OnTouchListener {
                 mPaths = state.getPaths();
             }
 
-            initPaints(null);
-
             mPaintColor = state.getPaintColor();
             mPaintAlpha = state.getPaintAlpha();
+
+            mCurrentPaint.setColor(state.getPaintColor());
+            mCurrentPaint.setAlpha(state.getPaintAlpha());
+            setPaintWidthPx(state.getPaintWidth());
 
             mResizeBehaviour = state.getResizeBehaviour();
 
@@ -462,7 +463,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(Canvas canvas) {
         if (mPaths.size() == 0 && mPoints.size() == 0) {
             return;
         }
