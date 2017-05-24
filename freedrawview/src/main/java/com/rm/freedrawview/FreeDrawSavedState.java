@@ -15,8 +15,8 @@ import java.util.ArrayList;
 
 class FreeDrawSavedState extends View.BaseSavedState {
 
-    private ArrayList<HistoryPath> mCanceledPaths;
-    private ArrayList<HistoryPath> mPaths;
+    private ArrayList<HistoryPath> mPaths = new ArrayList<>();
+    private ArrayList<HistoryPath> mCanceledPaths = new ArrayList<>();
 
     private int mPaintColor;
     private int mPaintAlpha;
@@ -45,53 +45,6 @@ class FreeDrawSavedState extends View.BaseSavedState {
         mLastDimensionW = lastDimensionW;
         mLastDimensionH = lastDimensionH;
     }
-
-    private FreeDrawSavedState(Parcel in) {
-        super(in);
-        try {
-            mPaths = in.readArrayList(HistoryPath.class.getClassLoader());
-            mCanceledPaths = in.readArrayList(HistoryPath.class.getClassLoader());
-
-            mPaintColor = in.readInt();
-            mPaintAlpha = in.readInt();
-            mPaintWidth = in.readFloat();
-
-            mResizeBehaviour = (ResizeBehaviour) in.readSerializable();
-
-            mLastDimensionW = in.readInt();
-            mLastDimensionH = in.readInt();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        super.writeToParcel(out, flags);
-        out.writeTypedList(mPaths);
-        out.writeTypedList(mCanceledPaths);
-
-        out.writeInt(mPaintColor);
-        out.writeInt(mPaintAlpha);
-        out.writeFloat(mPaintWidth);
-
-        out.writeSerializable(mResizeBehaviour);
-
-        out.writeInt(mLastDimensionW);
-        out.writeInt(mLastDimensionH);
-    }
-
-    // Parcelable CREATOR class, needed for parcelable to work
-    public static final Parcelable.Creator<FreeDrawSavedState> CREATOR =
-            new Parcelable.Creator<FreeDrawSavedState>() {
-                public FreeDrawSavedState createFromParcel(Parcel in) {
-                    return new FreeDrawSavedState(in);
-                }
-
-                public FreeDrawSavedState[] newArray(int size) {
-                    return new FreeDrawSavedState[size];
-                }
-            };
 
     ArrayList<HistoryPath> getPaths() {
         return mPaths;
@@ -134,4 +87,50 @@ class FreeDrawSavedState extends View.BaseSavedState {
     int getLastDimensionH() {
         return mLastDimensionH;
     }
+
+    // Parcelable stuff
+    private FreeDrawSavedState(Parcel in) {
+        super(in);
+
+        in.readTypedList(mPaths, HistoryPath.CREATOR);
+        in.readTypedList(mCanceledPaths, HistoryPath.CREATOR);
+
+        mPaintColor = in.readInt();
+        mPaintAlpha = in.readInt();
+        mPaintWidth = in.readFloat();
+
+        mResizeBehaviour = (ResizeBehaviour) in.readSerializable();
+
+        mLastDimensionW = in.readInt();
+        mLastDimensionH = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        super.writeToParcel(out, flags);
+
+        out.writeTypedList(mPaths);
+        out.writeTypedList(mCanceledPaths);
+
+        out.writeInt(mPaintColor);
+        out.writeInt(mPaintAlpha);
+        out.writeFloat(mPaintWidth);
+
+        out.writeSerializable(mResizeBehaviour);
+
+        out.writeInt(mLastDimensionW);
+        out.writeInt(mLastDimensionH);
+    }
+
+    // Parcelable CREATOR class, needed for parcelable to work
+    public static final Parcelable.Creator<FreeDrawSavedState> CREATOR =
+            new Parcelable.Creator<FreeDrawSavedState>() {
+                public FreeDrawSavedState createFromParcel(Parcel in) {
+                    return new FreeDrawSavedState(in);
+                }
+
+                public FreeDrawSavedState[] newArray(int size) {
+                    return new FreeDrawSavedState[size];
+                }
+            };
 }

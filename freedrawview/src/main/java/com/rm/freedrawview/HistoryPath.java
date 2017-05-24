@@ -19,7 +19,7 @@ class HistoryPath implements Parcelable, Serializable {
 
     private static final String TAG = HistoryPath.class.getSimpleName();
 
-    private ArrayList<Point> points;
+    private ArrayList<Point> points = new ArrayList<>();
     private int paintColor;
     private int paintAlpha;
     private float paintWidth;
@@ -37,19 +37,6 @@ class HistoryPath implements Parcelable, Serializable {
         this.originX = points.get(0).x;
         this.originY = points.get(0).y;
         this.isPoint = FreeDrawHelper.isAPoint(points);
-
-        generatePath();
-        generatePaint();
-    }
-
-    private HistoryPath(Parcel in) {
-        originX = in.readFloat();
-        originY = in.readFloat();
-        in.readTypedList(points, Point.CREATOR);
-        paintColor = in.readInt();
-        paintAlpha = in.readInt();
-        paintWidth = in.readFloat();
-        isPoint = in.readByte() != 0;
 
         generatePath();
         generatePaint();
@@ -158,6 +145,22 @@ class HistoryPath implements Parcelable, Serializable {
     }
 
     // Parcelable stuff
+    private HistoryPath(Parcel in) {
+        in.readTypedList(points, Point.CREATOR);
+
+        paintColor = in.readInt();
+        paintAlpha = in.readInt();
+        paintWidth = in.readFloat();
+
+        originX = in.readFloat();
+        originY = in.readFloat();
+
+        isPoint = in.readByte() != 0;
+
+        generatePath();
+        generatePaint();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -166,11 +169,14 @@ class HistoryPath implements Parcelable, Serializable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeTypedList(points);
-        dest.writeSerializable(paintColor);
-        dest.writeSerializable(paintAlpha);
+
+        dest.writeInt(paintColor);
+        dest.writeInt(paintAlpha);
         dest.writeFloat(paintWidth);
+
         dest.writeFloat(originX);
         dest.writeFloat(originY);
+
         dest.writeByte((byte) (isPoint ? 1 : 0));
     }
 

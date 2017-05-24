@@ -19,11 +19,6 @@ class Point implements Parcelable, Serializable {
         x = y = -1;
     }
 
-    private Point(Parcel in) {
-        x = in.readFloat();
-        y = in.readFloat();
-    }
-
     @Override
     public String toString() {
         return "" + x + " : " + y + " - ";
@@ -31,6 +26,11 @@ class Point implements Parcelable, Serializable {
 
 
     // Parcelable stuff
+    private Point(Parcel in) {
+        x = in.readFloat();
+        y = in.readFloat();
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -54,5 +54,4 @@ class Point implements Parcelable, Serializable {
             return new Point[size];
         }
     };
-
 }
