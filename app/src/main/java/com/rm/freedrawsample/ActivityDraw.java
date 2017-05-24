@@ -3,6 +3,7 @@ package com.rm.freedrawsample;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,19 +119,17 @@ public class ActivityDraw extends AppCompatActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        FileHelper.saveStateIntoFile(this, mFreeDrawView.getCurrentViewStateAsSerializable());
+    }
+
+    @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (isFinishing()) {
-            FileHelper.saveStateIntoFile(this, mFreeDrawView.getCurrentViewStateAsSerializable());
-        }
     }
 
     private void changeColor() {
