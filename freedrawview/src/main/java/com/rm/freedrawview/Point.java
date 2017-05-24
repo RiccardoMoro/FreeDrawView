@@ -3,11 +3,16 @@ package com.rm.freedrawview;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Riccardo Moro on 9/25/2016.
  */
 
-class Point implements Parcelable {
+class Point implements Parcelable, Serializable {
+
+    static final long serialVersionUID = 42L;
+
     float x, y;
 
     Point() {

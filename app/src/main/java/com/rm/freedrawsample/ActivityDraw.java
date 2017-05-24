@@ -70,8 +70,8 @@ public class ActivityDraw extends AppCompatActivity
         if (savedInstanceState == null) {
 
             // Restore the previous saved state
-            //FreeDrawSerializableState state = FileHelper.getSavedStoreFromFile(this);
-            //mFreeDrawView.restoreStateFromSerializable(state);
+            FreeDrawSerializableState state = FileHelper.getSavedStoreFromFile(this);
+            mFreeDrawView.restoreStateFromSerializable(state);
         }
 
         mAlphaBar.setMax((ALPHA_MAX - ALPHA_MIN) / ALPHA_STEP);

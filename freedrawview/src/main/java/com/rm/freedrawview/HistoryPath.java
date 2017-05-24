@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 class HistoryPath implements Parcelable, Serializable {
 
+    static final long serialVersionUID = 41L;
+
     private static final String TAG = HistoryPath.class.getSimpleName();
 
     private ArrayList<Point> points;
@@ -24,8 +26,8 @@ class HistoryPath implements Parcelable, Serializable {
     private float originX, originY;
     private boolean isPoint;
 
-    private Path path = null;
-    private Paint paint = null;
+    private transient Path path = null;
+    private transient Paint paint = null;
 
     HistoryPath(@NonNull ArrayList<Point> points, @NonNull Paint paint) {
         this.points = new ArrayList<>(points);

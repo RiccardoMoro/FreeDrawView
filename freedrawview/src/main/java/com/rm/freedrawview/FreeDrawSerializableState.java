@@ -1,7 +1,5 @@
 package com.rm.freedrawview;
 
-import android.graphics.Paint;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,12 +9,14 @@ import java.util.ArrayList;
 
 public class FreeDrawSerializableState implements Serializable {
 
+    static final long serialVersionUID = 40L;
+
     private ArrayList<HistoryPath> mCanceledPaths;
     private ArrayList<HistoryPath> mPaths;
-    private Paint mCurrentPaint;
 
     private int mPaintColor;
     private int mPaintAlpha;
+    private float mPaintWidth;
 
     private ResizeBehaviour mResizeBehaviour;
 
@@ -24,15 +24,13 @@ public class FreeDrawSerializableState implements Serializable {
     private int mLastDimensionH;
 
     public FreeDrawSerializableState(ArrayList<HistoryPath> canceledPaths,
-                                     ArrayList<HistoryPath> paths, Paint currentPaint,
-                                     int paintColor, int paintAlpha,
-                                     ResizeBehaviour resizeBehaviour, int lastW, int lastH) {
+                                     ArrayList<HistoryPath> paths, int paintColor, int paintAlpha,
+                                     float paintWidth, ResizeBehaviour resizeBehaviour,
+                                     int lastW, int lastH) {
 
         setCanceledPaths(canceledPaths != null ? canceledPaths : new ArrayList<HistoryPath>());
         setPaths(paths != null ? paths : new ArrayList<HistoryPath>());
-        if (currentPaint != null) {
-            setCurrentPaint(currentPaint);
-        }
+        setPaintWidth(paintWidth >= 0 ? paintWidth : 0);
         setPaintColor(paintColor);
         setPaintAlpha(paintAlpha);
         setResizeBehaviour(resizeBehaviour);
@@ -56,12 +54,12 @@ public class FreeDrawSerializableState implements Serializable {
         this.mPaths = paths;
     }
 
-    public Paint getCurrentPaint() {
-        return mCurrentPaint;
+    public float getPaintWidth() {
+        return mPaintWidth;
     }
 
-    public void setCurrentPaint(Paint currentPaint) {
-        this.mCurrentPaint = currentPaint;
+    public void setPaintWidth(float paintWidth) {
+        this.mPaintWidth = paintWidth;
     }
 
     public int getPaintColor() {

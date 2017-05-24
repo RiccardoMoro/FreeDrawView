@@ -31,7 +31,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private static final int DEFAULT_ALPHA = 255;
 
     private Paint mCurrentPaint;
-    private Path mCurrentPath;// TODO make historyPath
+    private Path mCurrentPath;
 
     private ResizeBehaviour mResizeBehaviour;
 
@@ -354,8 +354,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      */
     public FreeDrawSerializableState getCurrentViewStateAsSerializable() {
 
-        return new FreeDrawSerializableState(mCanceledPaths, mPaths, mCurrentPaint, mPaintColor,
-                mPaintAlpha, mResizeBehaviour, mLastDimensionW, mLastDimensionH);
+        return new FreeDrawSerializableState(mCanceledPaths, mPaths, mPaintColor,
+                mPaintAlpha, mCurrentPaint.getStrokeWidth(), mResizeBehaviour,
+                mLastDimensionW, mLastDimensionH);
     }
 
     /**

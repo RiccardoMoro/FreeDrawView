@@ -1,9 +1,8 @@
 Changelog
 ---------
 
-#### New from 1.1.0 <br />
+#### New from v1.1.0 <br />
 (WIP) <br />
--Changes in the code, particularly in pojos <br />
 -Added option to save and restore the view state #8 <br />
 
 #### New from v1.0.2: <br />

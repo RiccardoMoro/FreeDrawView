@@ -112,6 +112,19 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
+From v1.1.0 you can get the current state of the Draw (as a Serializable object) and than restore it:
+```java
+        FreeDrawSerializableState state = mSignatureView.getCurrentViewStateAsSerializable();// This returns a FreeDrawSerializableState (which implements Serializable)
+
+        // Save this "state" object into a file or keep it where you want
+
+        mSignatureView.restoreStateFromSerializable(state);// Restore the state of the view
+
+        // Now all the previous paths and points have been restored (including the history)
+```
+
+To save this Serializable Object inside a file you can take a look at the class [FileHelper](app/src/main/java/com/rm/freedrawsample/FileHelper.java)
+
 <br />
 
 #### Supported Attributes
@@ -130,6 +143,7 @@ FreeDrawView
 #### Limitations and TODO
 * Multitouch drawing is currently not supported <br />
 * Eraser is not yet implemented <br />
+* ~~Manually restore state is not supported~~ <br />
 
 <br />
 
