@@ -1,5 +1,6 @@
 package com.rm.freedrawview;
 
+import android.graphics.Paint;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
@@ -16,10 +17,10 @@ class FreeDrawSavedState extends View.BaseSavedState {
 
     private ArrayList<HistoryPath> mCanceledPaths;
     private ArrayList<HistoryPath> mPaths;
-    private SerializablePaint mCurrentPaint;
 
     private int mPaintColor;
     private int mPaintAlpha;
+    private float mPaintWidth;
 
     private ResizeBehaviour mResizeBehaviour;
 
@@ -27,14 +28,14 @@ class FreeDrawSavedState extends View.BaseSavedState {
     private int mLastDimensionH;
 
     FreeDrawSavedState(Parcelable superState, ArrayList<HistoryPath> paths,
-                       ArrayList<HistoryPath> canceledPaths, SerializablePaint currentPaint,
+                       ArrayList<HistoryPath> canceledPaths, float paintWidth,
                        int paintColor, int paintAlpha, ResizeBehaviour resizeBehaviour,
                        int lastDimensionW, int lastDimensionH) {
         super(superState);
 
         mPaths = paths;
         mCanceledPaths = canceledPaths;
-        mCurrentPaint = currentPaint;
+        mPaintWidth = paintWidth;
 
         mPaintColor = paintColor;
         mPaintAlpha = paintAlpha;
@@ -53,6 +54,7 @@ class FreeDrawSavedState extends View.BaseSavedState {
 
             mPaintColor = in.readInt();
             mPaintAlpha = in.readInt();
+            mPaintWidth = in.readFloat();
 
             mResizeBehaviour = (ResizeBehaviour) in.readSerializable();
 
@@ -71,6 +73,7 @@ class FreeDrawSavedState extends View.BaseSavedState {
 
         out.writeInt(mPaintColor);
         out.writeInt(mPaintAlpha);
+        out.writeFloat(mPaintWidth);
 
         out.writeSerializable(mResizeBehaviour);
 
@@ -98,10 +101,6 @@ class FreeDrawSavedState extends View.BaseSavedState {
         return mCanceledPaths;
     }
 
-    SerializablePaint getCurrentPaint() {
-        return mCurrentPaint;
-    }
-
     @ColorInt
     int getPaintColor() {
         return mPaintColor;
@@ -110,6 +109,18 @@ class FreeDrawSavedState extends View.BaseSavedState {
     @IntRange(from = 0, to = 255)
     int getPaintAlpha() {
         return mPaintAlpha;
+    }
+
+    float getCurrentPaintWidth() {
+        return mPaintWidth;
+    }
+
+    Paint getCurrentPaint() {
+
+        Paint paint = FreeDrawHelper.createPaint();
+        FreeDrawHelper.setupStrokePaint(paint);
+        FreeDrawHelper.copyFromValues(paint, mPaintColor, mPaintAlpha, mPaintWidth, true);
+        return paint;
     }
 
     ResizeBehaviour getResizeBehaviour() {

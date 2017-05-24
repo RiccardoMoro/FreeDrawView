@@ -1,6 +1,9 @@
 package com.rm.freedrawview;
 
 import android.content.res.Resources;
+import android.graphics.ComposePathEffect;
+import android.graphics.CornerPathEffect;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -27,6 +30,71 @@ public class FreeDrawHelper {
         }
 
         return true;
+    }
+
+    /**
+     * Create, initialize and setup a paint
+     */
+    static Paint createPaintAndInitialize(int paintColor, int paintAlpha,
+                                          float paintWidth, boolean fill) {
+
+        Paint paint = createPaint();
+
+        initializePaint(paint, paintColor, paintAlpha, paintWidth, fill);
+
+        return paint;
+    }
+
+    static Paint createPaint() {
+        return new Paint(Paint.ANTI_ALIAS_FLAG);
+    }
+
+    static void initializePaint(Paint paint, int paintColor, int paintAlpha, float paintWidth,
+                                boolean fill) {
+
+        if (fill) {
+            setupFillPaint(paint);
+        } else {
+            setupStrokePaint(paint);
+        }
+
+        paint.setStrokeWidth(paintWidth);
+        paint.setColor(paintColor);
+        paint.setAlpha(paintAlpha);
+    }
+
+    static void setupFillPaint(Paint paint) {
+        paint.setStyle(Paint.Style.FILL);
+    }
+
+    static void setupStrokePaint(Paint paint) {
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setPathEffect(new ComposePathEffect(
+                new CornerPathEffect(100f),
+                new CornerPathEffect(100f)));
+        paint.setStyle(Paint.Style.STROKE);
+    }
+
+    static void copyFromPaint(Paint from, Paint to, boolean copyWidth) {
+
+        to.setColor(from.getColor());
+        to.setAlpha(from.getAlpha());
+
+        if (copyWidth) {
+            to.setStrokeWidth(from.getStrokeWidth());
+        }
+    }
+
+    static void copyFromValues(Paint to, int color, int alpha, float strokeWidth,
+                               boolean copyWidth) {
+
+        to.setColor(color);
+        to.setAlpha(alpha);
+
+        if (copyWidth) {
+            to.setStrokeWidth(strokeWidth);
+        }
     }
 
     /**

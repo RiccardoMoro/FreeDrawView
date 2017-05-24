@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rm.freedrawview.FreeDrawSerializableState;
 import com.rm.freedrawview.FreeDrawView;
 import com.rm.freedrawview.PathDrawnListener;
 import com.rm.freedrawview.PathRedoUndoCountChangeListener;
@@ -19,6 +20,8 @@ import com.rm.freedrawview.PathRedoUndoCountChangeListener;
 public class ActivityDraw extends AppCompatActivity
         implements View.OnClickListener, SeekBar.OnSeekBarChangeListener,
         PathRedoUndoCountChangeListener, FreeDrawView.DrawCreatorListener, PathDrawnListener {
+
+    private static final String TAG = ActivityDraw.class.getSimpleName();
 
     private static final int THICKNESS_STEP = 1;
     private static final int THICKNESS_MAX = 30;
@@ -63,6 +66,13 @@ public class ActivityDraw extends AppCompatActivity
         mBtnUndo.setOnClickListener(this);
         mBtnRedo.setOnClickListener(this);
         mBtnClearAll.setOnClickListener(this);
+
+        if (savedInstanceState == null) {
+
+            // Restore the previous saved state
+            //FreeDrawSerializableState state = FileHelper.getSavedStoreFromFile(this);
+            //mFreeDrawView.restoreStateFromSerializable(state);
+        }
 
         mAlphaBar.setMax((ALPHA_MAX - ALPHA_MIN) / ALPHA_STEP);
         mAlphaBar.setProgress(mFreeDrawView.getPaintAlpha());
@@ -112,6 +122,15 @@ public class ActivityDraw extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
 
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (isFinishing()) {
+            FileHelper.saveStateIntoFile(this, mFreeDrawView.getCurrentViewStateAsSerializable());
+        }
     }
 
     private void changeColor() {
