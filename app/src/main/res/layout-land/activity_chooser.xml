@@ -3,12 +3,12 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:orientation="horizontal">
 
     <Button
         android:id="@+id/draw_sample"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="Draw sample"
         android:textColor="@color/white"
@@ -17,11 +17,11 @@
 
     <Button
         android:id="@+id/scrollable_sample"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="Scrollable sample"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="24dp"
         app:backgroundTint="@color/colorPrimary"/>
 </LinearLayout>
