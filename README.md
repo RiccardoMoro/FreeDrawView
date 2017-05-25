@@ -145,6 +145,7 @@ FreeDrawView
 * Multitouch drawing is currently not supported <br />
 * Eraser is not yet implemented <br />
 * ~~Manually restore state is not supported~~ <br />
+* Get the draw screenshot from a FreeDrawSerializableState without adding the view
 
 <br />
 
