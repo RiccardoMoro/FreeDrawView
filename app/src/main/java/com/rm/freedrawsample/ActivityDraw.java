@@ -2,12 +2,15 @@ package com.rm.freedrawsample;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,11 +34,13 @@ public class ActivityDraw extends AppCompatActivity
     private static final int ALPHA_MAX = 255;
     private static final int ALPHA_MIN = 0;
 
+    private LinearLayout mRoot;
     private FreeDrawView mFreeDrawView;
     private View mSideView;
     private Button mBtnRandomColor, mBtnUndo, mBtnRedo, mBtnClearAll;
     private SeekBar mThicknessBar, mAlphaBar;
     private TextView mTxtRedoCount, mTxtUndoCount;
+    private ProgressBar mProgressBar;
 
     private ImageView mImgScreen;
     private Menu mMenu;
@@ -45,10 +50,14 @@ public class ActivityDraw extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draw);
 
+        mRoot = (LinearLayout) findViewById(R.id.root);
+
         mImgScreen = (ImageView) findViewById(R.id.img_screen);
 
         mTxtRedoCount = (TextView) findViewById(R.id.txt_redo_count);
         mTxtUndoCount = (TextView) findViewById(R.id.txt_undo_count);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
 
         mFreeDrawView = (FreeDrawView) findViewById(R.id.free_draw_view);
         mFreeDrawView.setOnPathDrawnListener(this);
@@ -72,11 +81,25 @@ public class ActivityDraw extends AppCompatActivity
 
         if (savedInstanceState == null) {
 
+            showLoadingSpinner();
+
             // Restore the previous saved state
-            FreeDrawSerializableState state = FileHelper.getSavedStoreFromFile(this);
-            if (state != null) {
-                mFreeDrawView.restoreStateFromSerializable(state);
-            }
+            FileHelper.getSavedStoreFromFile(this,
+                    new FileHelper.StateExtractorInterface() {
+                        @Override
+                        public void onStateExtracted(FreeDrawSerializableState state) {
+                            if (state != null) {
+                                mFreeDrawView.restoreStateFromSerializable(state);
+                            }
+
+                            hideLoadingSpinner();
+                        }
+
+                        @Override
+                        public void onStateExtractionError() {
+                            hideLoadingSpinner();
+                        }
+                    });
         }
 
         mAlphaBar.setMax((ALPHA_MAX - ALPHA_MIN) / ALPHA_STEP);
@@ -90,6 +113,17 @@ public class ActivityDraw extends AppCompatActivity
         mThicknessBar.setProgress(thicknessProgress);
         mThicknessBar.setOnSeekBarChangeListener(this);
         mSideView.setBackgroundColor(mFreeDrawView.getPaintColor());
+    }
+
+    private void showLoadingSpinner() {
+
+        TransitionManager.beginDelayedTransition(mRoot);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingSpinner() {
+
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -115,6 +149,15 @@ public class ActivityDraw extends AppCompatActivity
             return true;
         }
 
+        if (item.getItemId() == R.id.menu_delete) {
+            mFreeDrawView.clearDrawAndHistory();
+            FileHelper.deleteSavedStateFile(this);
+        }
+
+        if (item.getItemId() == R.id.menu_github) {
+            IntentHelper.openUrl(this, getString(R.string.github_url));
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -129,7 +172,7 @@ public class ActivityDraw extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        FileHelper.saveStateIntoFile(this, mFreeDrawView.getCurrentViewStateAsSerializable());
+        FileHelper.saveStateIntoFile(this, mFreeDrawView.getCurrentViewStateAsSerializable(), null);
     }
 
     @Override
@@ -192,6 +235,7 @@ public class ActivityDraw extends AppCompatActivity
     public void onBackPressed() {
         if (mImgScreen.getVisibility() == View.VISIBLE) {
             mMenu.findItem(R.id.menu_screen).setVisible(true);
+            mMenu.findItem(R.id.menu_delete).setVisible(true);
             mImgScreen.setImageBitmap(null);
             mImgScreen.setVisibility(View.GONE);
 
@@ -234,6 +278,7 @@ public class ActivityDraw extends AppCompatActivity
         mFreeDrawView.setVisibility(View.GONE);
 
         mMenu.findItem(R.id.menu_screen).setVisible(false);
+        mMenu.findItem(R.id.menu_delete).setVisible(false);
 
         mImgScreen.setVisibility(View.VISIBLE);
 

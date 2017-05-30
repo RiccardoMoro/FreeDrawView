@@ -3,6 +3,7 @@ package com.rm.freedrawsample;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rm.freedrawview.FreeDrawView;
@@ -32,11 +33,28 @@ public class ActivityScrollable extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main_lite, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
-            return true;
+        }
+
+        if (item.getItemId() == R.id.menu_github) {
+            IntentHelper.openUrl(this, getString(R.string.github_url));
+        }
+
+        if (item.getItemId() == R.id.menu_delete) {
+            mDrawSignature.clearDrawAndHistory();
+            mDrawSmile.clearDrawAndHistory();
+            mDrawSad.clearDrawAndHistory();
+            mDrawLeaf.clearDrawAndHistory();
         }
 
         return super.onOptionsItemSelected(item);

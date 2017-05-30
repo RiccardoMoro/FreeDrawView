@@ -4,4 +4,14 @@
     <string name="signature_hint">First and last name</string>
     <string name="age_hint">Age</string>
     <string name="signature_label">Insert your signature here</string>
+    <string name="cancel_all">Cancel all</string>
+    <string name="delete_draw">Delete draw</string>
+    <string name="github_hint">Show Git Repository</string>
+    <string name="github_url">https://github.com/RiccardoMoro</string>
+    <string name="error_opening_url">Error opening link</string>
+    <string name="redo">Redo</string>
+    <string name="undo">Undo</string>
+    <string name="stroke_alpha">Stroke alpha</string>
+    <string name="stroke_width">Stroke width</string>
+    <string name="random_color">Random color</string>
 </resources>

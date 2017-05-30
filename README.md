@@ -19,7 +19,7 @@ Download
 ------
 #### Gradle:
 ```groovy
-compile 'com.rm:freedrawview:1.1.0'
+compile 'com.rm:freedrawview:1.1.1'
 ```
 
 <br />
@@ -155,9 +155,18 @@ Also, the FreeDrawView class gives some utility methods to handle path history: 
 * ```public void redoLast()``` <br />
     This method redraw the last undone segment  <br /> <br />
 * ```public void undoAll()``` <br />
-    This method undo all the drawn segments, can be redone one by one or all in one <br /> <br />
+    This method undo all the drawn segments, they can be redone one by one or all in one <br /> <br />
 * ```public void redoAll()``` <br />
     This method redraw all the undone segments <br /> <br />
+* ```public void clearHistory()``` <br />
+    This method removes all the history segments (The one that could be redone) <br /> <br />
+* ```public void clearDraw()``` <br />
+    This method removes all the current drawn segments, without adding them to the history <br /> <br />
+* ```public void clearDrawAndHistory()``` <br />
+    This method removes all the current drawn segments and clears the history <br /> <br />
+* ```public int getPathCount(boolean includeCurrentlyDrawingPath)``` <br />
+    This method returns the current number of segments drawn <br /> <br />
+
 
 <br />
 
