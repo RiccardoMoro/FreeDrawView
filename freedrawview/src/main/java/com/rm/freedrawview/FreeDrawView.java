@@ -283,7 +283,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     public void undoAll() {
         Collections.reverse(mPaths);
         mCanceledPaths.addAll(mPaths);
-        mPaths.clear();
+        mPaths = new ArrayList<>();
         invalidate();
 
         notifyRedoUndoCountChanged();
@@ -296,7 +296,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
 
         if (mCanceledPaths.size() > 0) {
             mPaths.addAll(mCanceledPaths);
-            mCanceledPaths.clear();
+            mCanceledPaths = new ArrayList<>();
             invalidate();
 
             notifyRedoUndoCountChanged();
@@ -318,6 +318,21 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     }
 
     /**
+     * Get how many paths are drawn on this FreeDrawView
+     *
+     * @param includeCurrentlyDrawingPath Include the path that is currently been drawn
+     * @return The number of paths drawn
+     */
+    public int getPathCount(boolean includeCurrentlyDrawingPath) {
+        int size = mPaths.size();
+
+        if (includeCurrentlyDrawingPath && mPoints.size() > 0) {
+            size++;
+        }
+        return size;
+    }
+
+    /**
      * Set a path drawn listener, will be called every time a new path is drawn
      */
     public void setOnPathDrawnListener(PathDrawnListener listener) {
@@ -329,6 +344,51 @@ public class FreeDrawView extends View implements View.OnTouchListener {
      */
     public void removePathDrawnListener() {
         mPathDrawnListener = null;
+    }
+
+    /**
+     * Clear the current draw and the history
+     */
+    public void clearDrawAndHistory() {
+
+        clearDraw(false);
+        clearHistory(true);
+    }
+
+    /**
+     * Clear the current draw
+     */
+    public void clearDraw() {
+
+        clearDraw(true);
+    }
+
+    private void clearDraw(boolean invalidate) {
+        mPoints = new ArrayList<>();
+        mPaths = new ArrayList<>();
+
+        notifyRedoUndoCountChanged();
+
+        if (invalidate) {
+            invalidate();
+        }
+    }
+
+    /**
+     * Clear the history (paths that can be redone)
+     */
+    public void clearHistory() {
+        clearHistory(true);
+    }
+
+    private void clearHistory(boolean invalidate) {
+        mCanceledPaths = new ArrayList<>();
+
+        notifyRedoUndoCountChanged();
+
+        if (invalidate) {
+            invalidate();
+        }
     }
 
     /**
@@ -524,7 +584,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
     private void createHistoryPathFromPoints() {
         mPaths.add(new HistoryPath(mPoints, new Paint(mCurrentPaint)));
 
-        mPoints.clear();
+        mPoints = new ArrayList<>();
 
         notifyPathDrawn();
         notifyRedoUndoCountChanged();
@@ -541,7 +601,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         // Clear all the history when restarting to draw
-        mCanceledPaths.clear();
+        mCanceledPaths = new ArrayList<>();
 
         if ((motionEvent.getAction() != MotionEvent.ACTION_UP) &&
                 (motionEvent.getAction() != MotionEvent.ACTION_CANCEL)) {
@@ -604,9 +664,9 @@ public class FreeDrawView extends View implements View.OnTouchListener {
         }
 
         if (mResizeBehaviour == ResizeBehaviour.CLEAR) {// If clear, clear all and return
-            mPaths.clear();
-            mCanceledPaths.clear();
-            mPoints.clear();
+            mPaths = new ArrayList<>();
+            mCanceledPaths = new ArrayList<>();
+            mPoints = new ArrayList<>();
             return;
         } else if (mResizeBehaviour == ResizeBehaviour.CROP) {
             xMultiplyFactor = yMultiplyFactor = 1;

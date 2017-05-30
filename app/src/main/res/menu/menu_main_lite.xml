@@ -12,9 +12,4 @@
         android:icon="@drawable/ic_delete"
         android:title="@string/delete_draw"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/menu_screen"
-        android:icon="@drawable/ic_screenshot"
-        android:title="@string/show_screenshot"
-        app:showAsAction="ifRoom"/>
 </menu>
