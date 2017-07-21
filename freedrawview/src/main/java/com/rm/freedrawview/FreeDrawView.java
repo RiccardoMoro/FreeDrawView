@@ -616,6 +616,7 @@ public class FreeDrawView extends View implements View.OnTouchListener {
             point.x = motionEvent.getX();
             point.y = motionEvent.getY();
             mPoints.add(point);
+            mFinishPath = false;
         } else
             mFinishPath = true;
 
