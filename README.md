@@ -19,7 +19,7 @@ Download
 ------
 #### Gradle:
 ```groovy
-compile 'com.rm:freedrawview:1.1.1'
+compile 'com.rm:freedrawview:1.1.2'
 ```
 
 <br />

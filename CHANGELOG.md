@@ -1,6 +1,10 @@
 Changelog
 ---------
 
+#### New from v1.1.2 <br />
+(21/07/2017) <br />
+-Fix a dot sometimes appearing at the beginning of a line, thanks [@ninadmg](https://github.com/ninadmg)
+
 #### New from v1.1.1 <br />
 (30/05/2017) <br />
 -Async read and write serializable in Sample <br />
