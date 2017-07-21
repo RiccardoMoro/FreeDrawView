@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/RiccardoMoro/FreeDrawView'
     gitUrl = 'https://github.com/RiccardoMoro/FreeDrawView.git'
 
-    libraryVersion = '1.1.1'
+    libraryVersion = '1.1.2'
 
     developerId = 'RiccardoMoro'
     developerName = 'Riccardo Moro'
@@ -32,7 +32,7 @@ android {
         minSdkVersion 9
         targetSdkVersion 25
         versionCode 1
-        versionName "1.1.1"
+        versionName "1.1.2"
     }
     buildTypes {
         release {
